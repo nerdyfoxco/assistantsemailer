@@ -1,0 +1,14 @@
+# Fyxer System Inventory (Memory)
+
+> [!IMPORTANT]
+> **ACCESS RULE**: Before creating ANY new file, Search this inventory. If a file with a similar purpose exists, USE IT or PATCH IT via CH99. Do not create duplicates.
+
+## Inventory Ledger
+
+| File Path | Chapter | Topic | UMP | Purpose / Function | Sealed? |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| [task.md](file:///C:/Users/Admin/.gemini/antigravity/brain/2acc25a4-4418-4658-993a-edeb31a12ea1/task.md) | N/A | N/A | N/A | Active Execution Task List | NO |
+| [implementation_plan.md](file:///C:/Users/Admin/.gemini/antigravity/brain/2acc25a4-4418-4658-993a-edeb31a12ea1/implementation_plan.md) | N/A | N/A | N/A | The Master Implementation Plan | NO |
+| `inventory_list.md` | N/A | N/A | N/A | This Inventory Ledger | NO |
+
+*(This list will be appended to by every UMP via the Seal process)*

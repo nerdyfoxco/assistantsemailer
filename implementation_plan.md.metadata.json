@@ -1,0 +1,6 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "ULTRA-EXPLICIT EXECUTION GRAPH. Defines the multi-file UMP structure (Context, Prompt, Code, Test, Proof). Enforces Branching (feat/CHxx...), Visual Verification (Screenshots), Inventory Checks, and Sealing for every atomic unit.",
+  "updatedAt": "2026-02-06T15:54:24.568862100Z",
+  "version": "3"
+}
