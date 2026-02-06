@@ -1,0 +1,225 @@
+# Fyxer SaaS Implementation Plan (Canonical Repository Tree)
+
+> [!IMPORTANT]
+> **GOVERNANCE ENFORCEMENT**: This project follows a strict "Governance First" approach. The Canonical Repository Tree below is THE LAW. No agent may create files outside this structure. Every file must have a defined context and purpose.
+
+## Goal Description
+Build "Fyxer", a governed, evidence-first, fail-closed, AI-native SaaS Operating System. This plan defines the **exact file structure** required to execute the vision, ensuring no drift and total auditability.
+
+## User Review Required
+> [!WARNING]
+> **Strict Adherence**: The file paths listed below are mandatory. The Agent must not invent new folder roots.
+> **Context Enforcement**: Every file created must strictly adhere to the "Context" defined in this tree.
+
+## The Canonical Repository Tree (E2E)
+
+### 📂 Root Structure
+*Context: The immutable top-level skeleton.*
+```text
+.
+├── foundation/           # [SHARED] The ONLY allowed shared dependency surface.
+├── chapters/             # [MODULES] Self-contained, deployable units (12 Chapters).
+├── spine/                # [IMPORTS] Python package roots to prevent import chaos.
+├── apps/                 # [FRONTEND] Web application roots.
+├── ops/                  # [OPS] CI/CD, Scripts, Migrations.
+├── .github/              # [CI] GitHub Workflows.
+└── README.md             # [DOCS] System Entry Point.
+```
+
+---
+
+### 🧱 1. Foundation: The Shared Surface
+*Context: Primitives used by all Chapters. No business logic allowed.*
+
+#### `foundation/contracts/` (Schemas & Laws)
+*   **`core_objects.schema.json`**: Defines `Chapter`, `Topic`, `Phase`, `UMP` objects. *Context: Ensures all agents build compatible modules.*
+*   **`pipe.schema.json`**: Defines the `Pipe` primitive (id, direction, payload). *Context: Governs data flow between modules.*
+*   **`runtime_context.schema.json`**: Defines the Request Context object (tenant_id, actor, trace_id). *Context: Ensures every request is attributable.*
+*   **`error.schema.json`**: Defines the Canonical Error object (code, severity, retryable). *Context: Ensures fail-closed error handling.*
+
+#### `foundation/runtime/` (Execution Primitives)
+*   **`config.py`**: Environment-aware configuration loader. *Context: Fails hard if `APP_ENV` or secrets are missing.*
+*   **`context.py`**: Runtime context manager (`get_context()`). *Context: Enforces Tenant binding at the function level.*
+*   **`logging.py`**: Structured JSON logger. *Context: Emits logs strictly matching the audit schema.*
+*   **`errors.py`**: Exception classes mapping to `error.schema.json`. *Context: Prevents generic "Exception" usage.*
+
+#### `foundation/guards/` (Enforcement)
+*   **`module_guard.py`**: CI script to check import paths. *Context: Ensures Chapters do not import each other directly.*
+*   **`seal_guard.py`**: Verifies file hashes against `SEAL.md`. *Context: Detects immutable file tampering.*
+
+#### `foundation/docs/` (System Memory)
+*   **`INVENTORY_LIST.md`**: Registry of all created files. *Context: Prevents duplication.*
+*   **`WORKLOG.md`**: Append-only log of sealed UMPs. *Context: High-level history.*
+*   **`PROOF_INDEX.md`**: Registry of all UMP proofs. *Context: Audit trail root.*
+
+---
+
+### 📦 2. Chapters: The Deployable Modules
+*Context: Every Chapter follows the EXACT same internal structure.*
+
+#### **Template Structure (Applied to ALL Chapters)**
+```text
+chapters/CHxx_NAME/
+├── README.md                          # Chapter manifesto.
+└── topics/
+    └── Txx_NAME/
+        ├── README.md                  # Topic blueprint.
+        └── phases/
+            └── PHxx_NAME/
+                └── umps/
+                    └── CHxx-Txx-PHxx-UMPxxx/  [The Atomic Brick]
+                        ├── SPEC.md            # What we are building.
+                        ├── CONTEXT.md         # Why this exists.
+                        ├── FILES.md           # Exact files list.
+                        ├── CODE/              # (Files moved to root upon Seal)
+                        ├── PROOF.md           # Evidence of success.
+                        ├── SEAL.md            # Immutable Hash.
+                        └── ump_manifest.json  # Machine-readable metadata.
+```
+
+---
+
+#### 🔰 **CH00: Governance Kernel**
+*Context: The Rules of Physics. No runtime logic.*
+*   **Topic T01: Definitions**
+    *   **Files**: (Moves to `foundation/contracts/` upon seal)
+*   **Topic T02: Sealing**
+    *   **Files**: (Moves to `foundation/tooling/` upon seal)
+*   **Topic T03: Inventory**
+    *   **Files**: (Moves to `foundation/docs/` upon seal)
+
+#### 🦴 **CH01: Foundation Spine**
+*Context: Runtime implementation of the Shared Surface.*
+*   **Topic T01: Runtime**
+    *   `loaders/config_loader.py`: Implements strict env loading.
+    *   `context/request_context.py`: Implements tenant binding.
+*   **Topic T02: Observability**
+    *   `logger/structured_logger.py`: Implements JSON logging.
+
+#### 🏢 **CH02: Tenancy, Auth & Billing**
+*Context: Who is allowed to exist.*
+*   **Topic T01: Tenancy**
+    *   `models/tenant.py`: Tenant logic (Active/Suspended).
+    *   `enforcement/lifecycle.py`: Logic to block suspended tenants.
+*   **Topic T02: Billing**
+    *   `gates/feature_gate.py`: Checks entitlements.
+
+#### 👮 **CH03: Authority & HITL**
+*Context: Who is allowed to act.*
+*   **Topic T01: Authority**
+    *   `models/authority_level.py`: Defines Levels 0-4.
+    *   `enforcement/nhun_guard.py`: "No Human Until Needed" logic.
+*   **Topic T02: Delegation**
+    *   `models/delegation.py`: User -> HITL delegation rules.
+
+#### ⚙️ **CH04: Work Engine**
+*Context: The State Machine for Work.*
+*   **Topic T01: Work Item**
+    *   `models/work_item.py`: The Canonical Work Object.
+    *   `statemachine/transitions.py`: Enforces (NOW -> DONE).
+*   **Topic T02: Scheduler**
+    *   `logic/follow_up.py`: Determines verification logic.
+
+#### 👁️ **CH05: Connectors (Eyes)**
+*Context: Read-only perception.*
+*   **Topic T01: Ingestion**
+    *   `gmail/fetcher.py`: Ephemeral Gmail API fetcher.
+    *   `outlook/fetcher.py`: Ephemeral Outlook API fetcher.
+*   **Topic T02: External Data**
+    *   `crm/reader.py`: Read-only CRM access.
+
+#### ✋ **CH06: Executors (Hands)**
+*Context: Controlled Action.*
+*   **Topic T01: Communication**
+    *   `email/sender.py`: SMTP/API sender (strictly gated).
+*   **Topic T02: Automation**
+    *   `browser/playwright_driver.py`: Headless browser controller.
+    *   `files/ocr_processor.py`: PDF/Image extraction.
+
+#### 📜 **CH07: Evidence Ledger**
+*Context: The Immutable Truth.*
+*   **Topic T01: Storage**
+    *   `ledger/writer.py`: Appends to immutable log.
+    *   `evidence/hasher.py`: Generates cryptographic proofs.
+
+#### 🖥️ **CH08: Web App Skin**
+*Context: The Human Interface.*
+*   **Topic T01: Components**
+    *   `ui/inbox/Feed.tsx`: The Inbox Feed.
+    *   `ui/workbench/TaskView.tsx`: The Work Item view.
+    *   `ui/hitl/Console.tsx`: The Operator Console.
+
+#### 🔑 **CH09: Identity, OAuth & CASA**
+*Context: Regulated Access.*
+*   **Topic T01: OAuth**
+    *   `flows/google_oauth.py`: Google Consent Screen flow.
+    *   `tokens/storage.py`: Encrypted token custody.
+
+#### 🛡️ **CH10: Deployment & Ops**
+*Context: Production Safety.*
+*   **Topic T01: Secrets**
+    *   `secrets/manager.py`: Fail-closed secret loading.
+*   **Topic T02: CI/CD**
+    *   `pipelines/ump_validator.py`: The CI script ensuring UMP compliance.
+
+#### 🩹 **CH99: Patch Global**
+*Context: The "God Mode" override (Audit logged).*
+*   **Topic T01: Hotfix**
+    *   `patches/`: Folder for emergency overriding scripts.
+
+---
+
+### 🧠 3. Spine: The Python Package Root
+*Context: Ensures all backend code is importable as `spine.modules.xxx`.*
+```text
+spine/
+├── modules/
+│   ├── governance/ -> (Symlink/Ref to CH00)
+│   ├── foundation/ -> (Symlink/Ref to CH01)
+│   ├── tenancy/    -> (Ref to CH02)
+│   ├── authority/  -> (Ref to CH03)
+│   ├── work/       -> (Ref to CH04)
+│   ├── connectors/ -> (Ref to CH05)
+│   ├── executors/  -> (Ref to CH06)
+│   ├── evidence/   -> (Ref to CH07)
+│   ├── identity/   -> (Ref to CH09)
+│   └── ops/        -> (Ref to CH10)
+└── README.md
+```
+
+### 💻 4. Apps: The Frontend Root
+*Context: The React/Next.js application.*
+```text
+apps/
+└── web/
+    ├── src/
+    │   ├── modules/
+    │   │   ├── inbox/
+    │   │   ├── hitl/
+    │   │   └── admin/
+    │   ├── app.tsx
+    │   └── main.tsx
+    └── package.json
+```
+
+### 🛠️ 5. Ops: The Machinery
+*Context: Operational scripts and configuration.*
+```text
+ops/
+├── ci/
+│   ├── verify_structure.sh    # The Structure Guard
+│   └── verify_seal.sh         # The Seal Guard
+├── security/
+│   └── owasp_scan.sh          # The Security Guard
+└── scripts/
+    └── bootstrap_chapter.sh   # Helper to create folder structures
+```
+
+---
+
+## 🚦 Execution Rules (The Contract)
+
+1.  **Context Check**: Before creating a file, verify its `Context` matches the directory it falls under.
+2.  **UMP Atomicity**: A UMP must only touch files within its own Chapter (or explicitly allowed `foundation/` files).
+3.  **Inventory Lock**: Every file creation must be logged in `INVENTORY_LIST.md`.
+4.  **Visual Proof**: Every UMP must conclude with visual evidence in `PROOF.md`.

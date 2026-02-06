@@ -1,0 +1,219 @@
+# Fyxer SaaS Implementation Plan (Canonical Execution Graph)
+
+> [!IMPORTANT]
+> **GOVERNANCE ENFORCEMENT**: This document is the **Law**. It defines the **Canonical Repository Tree** down to the atomic **Ultra Micro Phase (UMP)** level.
+> **STRICT ADHERENCE**: No Agent may create a file that is not explicitly defined in this graph.
+> **MODULE RULE**: Every Chapter is a self-contained module. No cross-chapter imports. Shared foundation only.
+
+## 📦 Module Packaging Rule (The Physical Law)
+
+1.  **Independence**: Every Chapter (`chapters/CHxx_NAME`) must be buildable, testable, and deployable in isolation.
+2.  **Sub-Modules**: Topics (`topics/Txx_NAME`) are sub-modules. They may not import from sibling Topics.
+3.  **Touch Fence**: A UMP running in `CH01` cannot touch files in `CH02`. It can ONLY touch files in its own UMP folder or explicitly allow-listed `foundation/` files.
+4.  **Shared Surface**: `foundation/` is the **only** shared dependency.
+
+---
+
+## 🌳 The Canonical Repository Tree & Execution Graph
+
+### 🧱 Chapter 00: Governance Kernel
+*Function: Define the rules of physics. No runtime logic.*
+
+#### 📘 Topic T01: Canonical Definitions
+*Blueprint: The JSON Schemas that define the system itself.*
+
+##### 🔹 Phase PH01: Core Objects
+*Building Block: The immutable contract objects.*
+
+###### 🧱 UMP-001: Define Chapter, Topic, UMP & Pipe Schemas
+*   **Context**: The Agent needs to know what a "Chapter" is to build one.
+*   **Pipes**: `PIPE_GOV_DEF_SCHEMAS [Down -> All]` (Defines the shape of all other modules)
+*   **Files**:
+    1.  `foundation/contracts/core_objects.schema.json`
+        *   **Context**: Defines the hierarchy structure.
+        *   **Purpose**: Validates `ump_manifest.json` targets.
+        *   **Connectivity**: Imported by `foundation/tooling/ump_validator.py`.
+        *   **Prompt**: "Create a JSON schema defining Chapter, Topic, Phase, and UMP with regex patterns for IDs (e.g., ^CH\\d{2}_)."
+    2.  `foundation/contracts/pipe.schema.json`
+        *   **Context**: Defines how data moves.
+        *   **Purpose**: Validates all inter-module communication.
+        *   **Connectivity**: Imported by `foundation/runtime/pipe_router.py`.
+        *   **Prompt**: "Create a schema for Pipe objects: id, direction (UP/DOWN/SIDE), payload_schema, version."
+    3.  `ump_manifest.json` (The UMP Definition itself)
+
+###### 🧱 UMP-002: Define Module Packaging Rule (Allowed Roots)
+*   **Context**: CI needs to know what "Self-Contained" means.
+*   **Files**:
+    1.  `foundation/contracts/module_rule.schema.json`
+        *   **Context**: A rule engine configuration.
+        *   **Purpose**: Defines allowed import paths per Chapter.
+        *   **Connectivity**: Used by `structure_guard.py`.
+        *   **Prompt**: "Create a schema mapping Chapter IDs to allowed_root_paths."
+
+#### 📘 Topic T02: Sealing & Evidence
+*Blueprint: The Immutable Truth.*
+
+##### 🔹 Phase PH01: Proof Templates
+###### 🧱 UMP-001: Define Proof & Seal Templates
+*   **Context**: Every UMP must leave evidence.
+*   **Files**:
+    1.  `foundation/docs/templates/PROOF_TEMPLATE.md`
+        *   **Context**: Standard format for evidence.
+        *   **Purpose**: Ensures consistent auditing.
+        *   **Prompt**: "Create a Markdown template with sections: Command Output, Visual Evidence, Diff Stats, Hash."
+    2.  `foundation/docs/templates/SEAL_TEMPLATE.md`
+        *   **Context**: The cryptographic seal.
+        *   **Purpose**: Locks the UMP.
+        *   **Prompt**: "Create a template for recording file path, SHA256 hash, and timestamp."
+
+---
+
+### 🦴 Chapter 01: Foundation Spine
+*Function: The Shared Runtime Substrate. The ONLY dependency.*
+
+#### 📘 Topic T01: Runtime Spine
+*Blueprint: How the code runs.*
+
+##### 🔹 Phase PH01: System Primitives
+###### 🧱 UMP-001: Config Loader (Fail-Closed)
+*   **Context**: The app cannot start without a known environment.
+*   **Files**:
+    1.  `foundation/runtime/config.py`
+        *   **Context**: Loads env vars.
+        *   **Purpose**: Hard crash if `APP_ENV` is missing.
+        *   **Connectivity**: Imported by every Chapter.
+        *   **Prompt**: "Write a config loader that reads `APP_ENV`. If missing or invalid (not local/dev/prod), raise `SystemExit`."
+
+###### 🧱 UMP-002: Request Context (Tenant Binding)
+*   **Context**: Every function call happens in a Tenant's reality.
+*   **Files**:
+    1.  `foundation/runtime/context.py`
+        *   **Context**: Thread-local storage for Request Context.
+        *   **Purpose**: Bind `tenant_id`, `actor`, `trace_id` globally.
+        *   **Connectivity**: Used by Logs, DB wrappers.
+        *   **Prompt**: "Create a Context Manager that requires `tenant_id` and `actor`. Throw error if accessed without initialization."
+    2.  `foundation/contracts/runtime_context.schema.json`
+        *   **Context**: The shape of the Context object.
+        *   **Purpose**: Validator for `context.py`.
+
+###### 🧱 UMP-003: Error Taxonomy
+*   **Context**: Errors must be machine-readable and fail-closed.
+*   **Files**:
+    1.  `foundation/contracts/error.schema.json`
+        *   **Context**: Standard Error Object.
+        *   **Purpose**: Client-facing error format.
+    2.  `foundation/runtime/errors.py`
+        *   **Context**: Python Exception classes.
+        *   **Purpose**: `class CanonicalError(Exception)`.
+        *   **Prompt**: "Define a base `CanonicalError` and subclasses `AuthError`, `TenantError`, `RateLimitError`. All must serialization to JSON."
+
+#### 📘 Topic T02: Observability
+##### 🔹 Phase PH01: Logging
+###### 🧱 UMP-001: Structured Logging
+*   **Context**: If it isn't logged, it didn't happen.
+*   **Files**:
+    1.  `foundation/runtime/logging.py`
+        *   **Context**: JSON Logger wrapper.
+        *   **Purpose**: Auto-injects `context.py` data (tenant, trace) into every log line.
+        *   **Prompt**: "Create a logger that outputs strict JSON. Automatically retrieve the current `tenant_id` from `context.py` and add it to the record."
+
+---
+
+### 🏢 Chapter 02: Tenancy, Auth & Billing
+*Function: Who is allowed to exist and act.*
+
+#### 📘 Topic T01: Tenancy Core
+*Blueprint: The Tenant Container.*
+
+##### 🔹 Phase PH01: Tenant Model
+###### 🧱 UMP-001: Tenant Model & Isolation Contract
+*   **Context**: Defines what a "Tenant" is.
+*   **Files**:
+    1.  `chapters/CH02_TENANCY/topics/T01/contracts/tenant.schema.json`
+        *   **Context**: Tenant Data Shape.
+        *   **Purpose**: Validating tenant objects.
+        *   **Prompt**: "Schema for Tenant: id, status (ACTIVE/SUSPENDED), billing_tier."
+
+###### 🧱 UMP-002: Tenant Lifecycle Enforcement
+*   **Context**: Suspended tenants cannot run code.
+*   **Files**:
+    1.  `chapters/CH02_TENANCY/topics/T01/logic/lifecycle.py`
+        *   **Context**: Business logic for status checks.
+        *   **Purpose**: `check_status(tenant_id)`. Raises `TenantSuspendedError`.
+        *   **Pipes**: `PIPE_TENANT_CHECK [Up <- Foundation]`
+        *   **Prompt**: "Write logic to check execution policies based on status. SUSPENDED = Read Only. DELETED = Block."
+
+---
+
+### ⚙️ Chapter 04: Work Engine
+*Function: The Token of Execution.*
+
+#### 📘 Topic T01: Work Item
+*Blueprint: The Canonical Unit of Work.*
+
+##### 🔹 Phase PH01: The Object
+###### 🧱 UMP-001: Define WorkItem
+*   **Context**: "Email" is just an input. "WorkItem" is the state.
+*   **Files**:
+    1.  `chapters/CH04_WORK/topics/T01/contracts/work_item.schema.json`
+        *   **Context**: The Mega-Schema for work.
+        *   **Purpose**: Source of Truth for frontend and backend.
+        *   **Fields**: `id`, `source_type` (EMAIL), `state` (NOW/TODAY/FUTURE), `assignee`, `resolution_lock`.
+        *   **Prompt**: "Define the WorkItem schema. State MUST be an enum. Resolution Lock is boolean."
+
+##### 🔹 Phase PH02: State Machine
+###### 🧱 UMP-001: Transitions
+*   **Context**: Work moves forward.
+*   **Files**:
+    1.  `chapters/CH04_WORK/topics/T01/logic/transitions.py`
+        *   **Context**: The logic engine.
+        *   **Purpose**: `transition(item, new_state)`.
+        *   **Prompt**: "Implement strict transitions. e.g., DONE cannot go back to NOW. Enforce Resolution Lock."
+
+---
+
+### 🛡️ Chapter 10: Deployment & Ops
+*Function: Production Safety.*
+
+#### 📘 Topic T01: Secrets
+##### 🔹 Phase PH01: Secret Management
+###### 🧱 UMP-001: Secret Definitions
+*   **Files**:
+    1.  `foundation/contracts/secret.schema.json`
+        *   **Purpose**: Define what a Secret object looks like.
+###### 🧱 UMP-002: Fail-Closed Loader
+*   **Files**:
+    1.  `foundation/runtime/secrets.py`
+        *   **Purpose**: Load secrets. Crash if missing.
+
+---
+
+### 🖥️ Chapter 08: Web App Skin
+*Function: The User Interface.*
+
+#### 📘 Topic T01: Inbox
+##### 🔹 Phase PH01: Feed
+###### 🧱 UMP-001: Inbox Feed Component
+*   **Context**: The main list view.
+*   **Files**:
+    1.  `apps/web/src/modules/inbox/Feed.tsx`
+        *   **Context**: React Component.
+        *   **Purpose**: Render `WorkItems`.
+        *   **Prompt**: "Create a Feed component that takes a list of WorkItems. Use 'ActionState' to group them (NOW, TODAY)."
+    2.  `apps/web/src/modules/inbox/FeedItem.tsx`
+        *   **Context**: Individual row.
+        *   **Purpose**: Render one item.
+
+---
+
+## 🚦 Execution Pipeline (CI/CD Mapping)
+
+1.  **Structure Guard**: CI checks `ump_manifest.json` against `allowed_roots`.
+2.  **Schema Guard**: Validates all `.schema.json` files.
+3.  **Seal Guard**: Ensures prior UMP hashes stored in `SEAL.md` match current files.
+4.  **Test Guard**: Runs `COMMANDS.md` tests for the current UMP.
+
+## 📝 Inventory Integration
+
+*   **`INVENTORY_LIST.md`**: Must be updated with every UMP.
+*   **Rule**: `grep` the inventory before `write_to_file`. If functionality exists, **STOP**.

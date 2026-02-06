@@ -1,0 +1,132 @@
+# Fyxer SaaS Implementation Plan (Canonical & Governed)
+
+> [!IMPORTANT]
+> **GOVERNANCE ENFORCEMENT**: This project follows a strict "Governance First" approach. No code is written without a defined Chapter, Topic, Phase, and Ultra Micro Phase (UMP). Drift, implicit assumptions, and skipping steps are strictly prohibited.
+
+## Goal Description
+Build "Fyxer", a governed, evidence-first, fail-closed, AI-native SaaS Operating System for email and work execution. The system transitions from a simple assistant to a "delegated operational layer" with closed-loop workflows, HITL (Human-In-The-Loop) governance, and strict tenant isolation.
+
+## User Review Required
+> [!WARNING]
+> **Immutable Sealing**: Once a UMP is sealed, it cannot be edited. Changes require a new UMP or a global patch via CH99.
+> **Strict Folder Structure**: The agent *must* adhere to the Canonical Repository Tree. No creating folders outside the defined hierarchy.
+> **Inventory Check**: Before creating any file, the `INVENTORY_LIST.md` (System Memory) must be checked to prevent duplication.
+
+## Proposed Changes (The Canonical Hierarchy)
+
+The system is divided into 12 self-contained **Chapters**. Each Chapter is a deployable module.
+
+### 🧱 Chapter 00: Governance Kernel (THE LAW)
+*Purpose: Define the "Rules of Physics" for the repo. No runtime logic, only definitions and enforcement.*
+- **Topic T01: Canonical Definitions** (UMP-001)
+  - Define `Chapter`, `Topic`, `Phase`, `UMP` objects as JSON schemas.
+  - Define `Pipe` primitives.
+- **Topic T02: Module Packaging Rule** (UMP-002)
+  - Enforce independent chapter builds.
+  - Define the `Allowed Roots` logic.
+- **Topic T03: Evidence & Sealing**
+  - Define `PROOF.md` and `SEAL.md` templates.
+
+### 🦴 Chapter 01: Foundation Spine (SHARED SURFACE)
+*Purpose: The ONLY allowed shared dependency. Contains runtime context, config, and errors.*
+- **Topic T01: Runtime Spine**
+  - **Phase 01**: System Primitives
+    - UMP-001: Config Loader (Env + Validation)
+    - UMP-002: Request Context (Tenant, Actor, Trace)
+    - UMP-003: Error Taxonomy (Fail-closed)
+- **Topic T02: Logs & Audit**
+  - UMP-001: Structured Logging
+
+### 🏢 Chapter 02: Tenancy, Auth & Billing
+*Purpose: Identity, isolation, and lifecycle enforcement.*
+- **Topic T01: Tenancy Core**
+  - UMP-001: Tenant Model & Isolation Contract
+  - UMP-002: Tenant Context Binding (Runtime Enforcement)
+  - UMP-003: Tenant Lifecycle (Active/Suspended/Deleted) logic.
+
+### 👮 Chapter 03: Authority, NHUN & HITL
+*Purpose: Decision rights and delegation layers.*
+- Defines Authority Levels (0-4).
+- Enforces "No Human Until Needed" (NHUN).
+
+### ⚙️ Chapter 04: Work Engine & State Machine
+*Purpose: The core "Work Item" lifecycle.*
+- Defines the canonical `WorkItem` object (not "Email").
+- Enforces state transitions (NOW -> TODAY -> FUTURE -> DONE).
+
+### 👁️ Chapter 05: Connectors (Eyes)
+*Purpose: Read-only perception.*
+- Gmail/Outlook API readers (Ephemeral ingestion).
+- Calendar & CRM readers.
+
+### ✋ Chapter 06: Executors (Hands)
+*Purpose: Controlled action.*
+- Email Senders.
+- Browser Automation (Playwright).
+- File Processors (OCR).
+
+### 📜 Chapter 07: Evidence Ledger
+*Purpose: Proof and Audit.*
+- Immutable logging of all decisions and actions.
+
+### 🖥️ Chapter 08: Web App Skin
+*Purpose: User Interface.*
+- Inbox UI, Workbench, HITL Console.
+
+### 🔑 Chapter 09: Identity, OAuth & CASA
+*Purpose: Regulated identity execution.*
+- OAuth flows, Token storage, CASA compliance.
+
+### 🛡️ Chapter 10: Deployment, Ops & Security
+*Purpose: Production safety.*
+- CI/CD Pipelines.
+- OWASP Guards.
+- Secrets Management (UMP-001 to UMP-004 defined in source).
+
+### 🩹 Chapter 99: Patch Global
+*Purpose: Emergency overrides and retroactive governance.*
+
+## Execution Process (The UMP Contract)
+
+For **EVERY** Ultra Micro Phase (UMP), the following process is mandatory:
+
+1.  **Inventory Check**: Check `foundation/docs/INVENTORY_LIST.md` (and `WORKLOG.md`) to ensure the function implies no duplication.
+2.  **UMP Setup**: Create the standardized UMP folder structure:
+    `chapters/<CH>/topics/<TOPIC>/phases/<PHASE>/umps/<UMP_ID>/`
+3.  **Manifest Creation**: Create `ump_manifest.json` defining `allowed_roots`, `touched_files`, `pipes`, and `seal` rules.
+4.  **Implementation**:
+    - Write/Modify code in `allowed_roots` ONLY.
+    - Create `SPEC.md`, `COMMANDS.md`, `EXPECTED.md`.
+5.  **Verification (Visual)**:
+    - Run the test (`COMMANDS.md`).
+    - **Capture Screenshot** (even for CLI outputs if possible, or visually confirm via browser for web UMPs).
+    - Create `PROOF.md` with evidence.
+6.  **Sealing**:
+    - Generate File Hashes.
+    - Write `SEAL.md`.
+    - Append to `foundation/docs/WORKLOG.md` and `INVENTORY_LIST.md`.
+7.  **Push**: Commit to the strictly named branch (e.g., `feature/CH01-T01-UMP001`).
+
+## Verification Plan
+
+### Automated Tests
+- **Module Boundary Guard**: CI script to verify no cross-chapter imports.
+- **Schema Validation**: All JSON schemas (Chapter, Topic, Pipe, etc.) must validate.
+- **Canary Tests**: Positive and Negative tests for every UMP (e.g., "Active Tenant passes", "Deleted Tenant blocks").
+
+### Manual Verification
+- **Visual Proof**: The Agent must visually confirm the output (via `read_terminal` or `browser_screenshot`) before sealing a UMP.
+- **Inventory Audit**: Ensure no file is created without being logged in the Inventory.
+
+## Canonical Repository Tree
+
+```text
+.
+├── foundation/           # ONLY shared dependency surface (Contracts, Runtime, Pipes)
+├── chapters/             # DEPLOYABLE MODULES (CH00 - CH12)
+├── spine/                # Import roots
+├── apps/                 # Frontend
+├── ops/                  # CI/CD, Scripts
+├── .github/              # Workflows
+└── README.md
+```
