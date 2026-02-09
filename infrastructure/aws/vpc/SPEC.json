@@ -1,0 +1,11 @@
+{
+    "ump_id": "CH02",
+    "name": "AWS VPC",
+    "files": [
+        "infrastructure/aws/vpc/main.tf",
+        "infrastructure/aws/vpc/outputs.tf",
+        "infrastructure/aws/vpc/variables.tf"
+    ],
+    "validation": "terraform validate",
+    "visual_verification": "Generate 'vpc_report.html' showing topology."
+}

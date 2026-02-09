@@ -1,0 +1,28 @@
+
+    <html>
+    <head>
+        <style>
+            body { font-family: monospace; padding: 20px; background: #222; color: #fff; }
+            .card { border: 1px solid #555; padding: 15px; border-left: 5px solid #555; }
+            .pass { border-left-color: #0f0; }
+            .fail { border-left-color: #f00; }
+        </style>
+    </head>
+    <body>
+        <h1>CH02: VPC Verification</h1>
+        <div class="card pass">
+            <h2>Terraform Validate</h2>
+            <p><strong>Status:</strong> PASS</p>
+            <pre>Success! The configuration is valid.
+
+</pre>
+        </div>
+        <div class="card pass">
+            <h2>Topology Check</h2>
+            <p><strong>CIDR:</strong> 10.0.0.0/16</p>
+            <p><strong>AZs:</strong> 3 (High Availability)</p>
+            <p><strong>Subnets:</strong> 3 Public, 3 Private</p>
+        </div>
+    </body>
+    </html>
+    
