@@ -1,0 +1,22 @@
+{
+    "phase": "2 (App Core)",
+    "ump": "20-01",
+    "name": "Backend Skeleton",
+    "technical_stack": {
+        "language": "python",
+        "version": "3.10+",
+        "framework": "fastapi",
+        "package_manager": "poetry"
+    },
+    "requirements": [
+        "Strict Typing (mypy)",
+        "Pydantic V2 Models",
+        "Async SQLAlchemy",
+        "Health Check Endpoint (/health)"
+    ],
+    "verification": {
+        "type": "visual_browser",
+        "target": "http://localhost:8000/health",
+        "criteria": "JSON response with status: ok"
+    }
+}
