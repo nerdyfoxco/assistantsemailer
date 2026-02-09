@@ -1,0 +1,11 @@
+{
+    "ump_id": "CH03",
+    "name": "AWS IAM",
+    "files": [
+        "infrastructure/aws/iam/main.tf",
+        "infrastructure/aws/iam/outputs.tf",
+        "infrastructure/aws/iam/variables.tf"
+    ],
+    "validation": "terraform validate",
+    "visual_verification": "Generate 'iam_report.html' showing Roles."
+}
