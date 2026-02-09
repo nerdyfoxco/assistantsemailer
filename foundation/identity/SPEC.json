@@ -1,0 +1,10 @@
+{
+    "ump_id": "UMP-00-02",
+    "name": "Tenant Isolation Model",
+    "files": [
+        "foundation/identity/models.py",
+        "foundation/identity/access.py"
+    ],
+    "validation": "python test_identity.py",
+    "success_criteria": "All 10 logic tests must pass, enforcing strict tenant boundaries."
+}

@@ -1,0 +1,10 @@
+{
+    "ump_id": "UMP-00-01",
+    "name": "Deployment Readiness Contract",
+    "files": [
+        "foundation/contracts/deployment_readiness.json",
+        "foundation/contracts/schema_drc.json"
+    ],
+    "validation": "python validate_drc.py",
+    "success_criteria": "DRC must be valid against Schema and contain the V0 Vertical Slice definition."
+}
