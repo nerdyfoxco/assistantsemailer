@@ -1,0 +1,40 @@
+
+    <html>
+    <head>
+        <title>UMP-20-02 Verification</title>
+        <style>
+            body { font-family: sans-serif; background: #222; color: #eee; padding: 20px; }
+            .card { background: #333; padding: 20px; margin-bottom: 20px; border-left: 5px solid green; }
+            h1 { color: green; }
+            pre { background: #111; padding: 10px; overflow: auto; }
+        </style>
+    </head>
+    <body>
+        <h1>UMP-20-02: Database Models - PASS</h1>
+        
+        <div class="card">
+            <h2>1. DB Unit Tests (CRUD)</h2>
+            <p>Status: PASS</p>
+            <details>
+                <summary>View Output</summary>
+                <pre>....                                                                     [100%]
+============================== warnings summary ===============================
+tests/test_db.py::test_create_user
+  C:\Users\Admin\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+4 passed, 1 warning in 1.94s
+</pre>
+            </details>
+        </div>
+        
+        <div class="card">
+            <h2>2. Connectivity Check</h2>
+            <p>Status: PASS</p>
+            <p>Executed: SELECT 1</p>
+            <p>Driver: sqlite+aiosqlite</p>
+        </div>
+    </body>
+    </html>
+    

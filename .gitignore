@@ -22,3 +22,4 @@ Thumbs.db
 *.log
 infrastructure/local/01_os/env_status.json
 infrastructure/local/01_os/env_report.html
+spine.db
