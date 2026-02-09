@@ -1,0 +1,11 @@
+{
+    "ump_id": "CH05",
+    "name": "AWS Database",
+    "files": [
+        "infrastructure/aws/database/main.tf",
+        "infrastructure/aws/database/outputs.tf",
+        "infrastructure/aws/database/variables.tf"
+    ],
+    "validation": "terraform validate",
+    "visual_verification": "Generate 'database_report.html' showing resources."
+}
