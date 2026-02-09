@@ -1,0 +1,11 @@
+{
+    "ump_id": "CH04",
+    "name": "AWS Compute",
+    "files": [
+        "infrastructure/aws/compute/main.tf",
+        "infrastructure/aws/compute/outputs.tf",
+        "infrastructure/aws/compute/variables.tf"
+    ],
+    "validation": "terraform validate",
+    "visual_verification": "Generate 'compute_report.html' showing resources."
+}
