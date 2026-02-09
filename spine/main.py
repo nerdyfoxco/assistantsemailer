@@ -18,6 +18,9 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_headers=["*"],
     )
 
+from spine.api.v1.api import api_router
+app.include_router(api_router, prefix=settings.API_V1_STR)
+
 @app.get("/health", status_code=200)
 def health_check():
     """
