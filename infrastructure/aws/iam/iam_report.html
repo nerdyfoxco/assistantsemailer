@@ -1,0 +1,27 @@
+
+    <html>
+    <head>
+        <style>
+            body { font-family: monospace; padding: 20px; background: #222; color: #fff; }
+            .card { border: 1px solid #555; padding: 15px; border-left: 5px solid #555; }
+            .pass { border-left-color: #0f0; }
+            .fail { border-left-color: #f00; }
+        </style>
+    </head>
+    <body>
+        <h1>CH03: IAM Verification</h1>
+        <div class="card pass">
+            <h2>Terraform Validate</h2>
+            <p><strong>Status:</strong> PASS</p>
+            <pre>Success! The configuration is valid.
+
+</pre>
+        </div>
+        <div class="card pass">
+            <h2>Role Logic Check</h2>
+            <p><strong>EKS Cluster:</strong> AmazonEKSClusterPolicy Attached</p>
+            <p><strong>EKS Node:</strong> WorkerNode + CNI + RegistryRead Attached</p>
+        </div>
+    </body>
+    </html>
+    
