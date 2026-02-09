@@ -1,0 +1,11 @@
+{
+    "ump_id": "CH06",
+    "name": "AWS Cache",
+    "files": [
+        "infrastructure/aws/cache/main.tf",
+        "infrastructure/aws/cache/outputs.tf",
+        "infrastructure/aws/cache/variables.tf"
+    ],
+    "validation": "terraform validate",
+    "visual_verification": "Generate 'cache_report.html' showing resources."
+}
