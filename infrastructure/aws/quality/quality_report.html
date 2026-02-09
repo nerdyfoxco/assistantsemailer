@@ -1,0 +1,69 @@
+
+    <html>
+    <head>
+        <style>
+            body { font-family: monospace; padding: 20px; background: #222; color: #fff; }
+            .card { border: 1px solid #555; padding: 15px; border-left: 5px solid #555; }
+            .pass { border-left-color: #0f0; }
+            .fail { border-left-color: #f00; }
+        </style>
+    </head>
+    <body>
+        <h1>CH08: Quality (CI/CD) Verification</h1>
+        <div class="card pass">
+            <h2>Workflow Check</h2>
+            <p><strong>File:</strong> .github/workflows/terraform.yml</p>
+            <p><strong>Status:</strong> PASS</p>
+        </div>
+        <div class="card pass">
+            <h2>Content Check</h2>
+            <pre>name: "Terraform Infrastructure"
+
+on:
+  push:
+    branches: [ "main" ]
+    paths: [ "infrastructure/aws/**" ]
+  pull_request:
+    branches: [ "main" ]
+    paths: [ "infrastructure/aws/**" ]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./infrastructure/aws
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+
+      - name: Terraform Init
+        run: terraform init -backend=false
+
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        if: github.event_name == 'pull_request'
+        run: terraform plan -input=false
+
+      # Note: Apply step would go here, usually gated by environment protection rules or manual approval.
+</pre>
+        </div>
+    </body>
+    </html>
+    
