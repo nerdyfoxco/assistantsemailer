@@ -1,0 +1,20 @@
+{
+  "ump_id": "UMP-01-01",
+  "name": "Environment Baseline Verification",
+  "required_tools": {
+    "python": ">=3.10",
+    "node": ">=18.0",
+    "docker": ">=24.0",
+    "terraform": ">=1.5",
+    "aws": ">=2.0",
+    "git": ">=2.30"
+  },
+  "outputs": [
+    "env_report.html",
+    "env_status.json"
+  ],
+  "visual_verification": {
+    "target": "env_report.html",
+    "success_criteria": "All rows must show GREEN status."
+  }
+}

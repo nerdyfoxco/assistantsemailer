@@ -1,0 +1,9 @@
+{
+    "ump_id": "UMP-00-03",
+    "name": "Immutable Audit Ledger",
+    "files": [
+        "foundation/audit/chain.py"
+    ],
+    "validation": "python test_audit.py",
+    "success_criteria": "Chain must detect 100% of tampering attempts in the test suite."
+}

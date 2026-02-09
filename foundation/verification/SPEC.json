@@ -1,0 +1,10 @@
+{
+    "ump_id": "UMP-00-04",
+    "name": "Phase 15.H Runtime Engine",
+    "files": [
+        "foundation/verification/engine.py",
+        "foundation/verification/guarantees.py"
+    ],
+    "validation": "python test_verification.py",
+    "success_criteria": "All 10 tests pass, ensuring guarantees block execution when violated."
+}

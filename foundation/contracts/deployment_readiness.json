@@ -1,0 +1,36 @@
+{
+    "contract_version": "1.0",
+    "deployment_id": "v0_vertical_slice",
+    "description": "The Bootstrap Vertical Slice. Minimal Viable Features for End-to-End Email Loop.",
+    "required_capabilities": [
+        "user_onboarding",
+        "gmail_oauth_connect",
+        "fetch_single_email",
+        "binary_classification",
+        "draft_generation",
+        "user_approve_mechanism",
+        "send_email_via_api"
+    ],
+    "security_floor": {
+        "no_raw_storage_of_email_body": true,
+        "user_final_authority_lock": true,
+        "no_autonomous_send": true,
+        "audit_logging_enabled": true
+    },
+    "allowed_stubs": [
+        "billing_integration",
+        "teams_management",
+        "hitl_dashboard_advanced",
+        "attachments_processing",
+        "calendar_sync"
+    ],
+    "exit_condition": {
+        "metric": "successful_loop_count",
+        "threshold": 1,
+        "description": "One real email fetched, drafted, approved by user, and sent."
+    },
+    "forbidden_patterns": [
+        "prompt_chaining_without_review",
+        "direct_db_write_from_public_web"
+    ]
+}
