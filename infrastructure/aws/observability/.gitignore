@@ -1,0 +1,9 @@
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+.terraform.lock.hcl
+*_report.html
+*_report.png
+capture_screenshot.ps1
+visual_verifier.py

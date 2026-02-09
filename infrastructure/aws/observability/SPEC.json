@@ -1,0 +1,11 @@
+{
+    "ump_id": "CH09",
+    "name": "AWS Observability",
+    "files": [
+        "infrastructure/aws/observability/main.tf",
+        "infrastructure/aws/observability/outputs.tf",
+        "infrastructure/aws/observability/variables.tf"
+    ],
+    "validation": "terraform validate",
+    "visual_verification": "Generate 'observability_report.html' and capture screenshot."
+}
