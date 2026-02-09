@@ -1,0 +1,41 @@
+
+    <html>
+    <head>
+        <title>UMP-20-06 Verification</title>
+        <style>
+            body { font-family: sans-serif; background: #222; color: #eee; padding: 20px; }
+            .card { background: #333; padding: 20px; margin-bottom: 20px; border-left: 5px solid green; }
+            h1 { color: green; }
+            pre { background: #111; padding: 10px; overflow: auto; }
+        </style>
+    </head>
+    <body>
+        <h1>UMP-20-06: Domain Logic - PASS</h1>
+        
+        <div class="card">
+            <h2>1. Tenant & Email Tests</h2>
+            <p>Status: PASS</p>
+            <details>
+                <summary>View Output</summary>
+                <pre>..                                                                       [100%]
+============================== warnings summary ===============================
+tests/test_domain_logic.py::test_tenant_creation
+  C:\Users\Admin\AppData\Local\Programs\Python\Python313\Lib\site-packages\sqlalchemy\sql\schema.py:3624: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+
+tests/test_domain_logic.py::test_email_ingestion_idempotency
+  C:\Users\Admin\.gemini\Workspaces\Email Systems\spine\tests\test_domain_logic.py:50: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    received_at=datetime.utcnow(),
+
+tests/test_domain_logic.py::test_email_ingestion_idempotency
+  C:\Users\Admin\.gemini\Workspaces\Email Systems\spine\tests\test_domain_logic.py:62: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    received_at=datetime.utcnow(),
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2 passed, 3 warnings in 0.66s
+</pre>
+            </details>
+        </div>
+    </body>
+    </html>
+    
