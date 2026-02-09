@@ -1,0 +1,11 @@
+{
+    "ump_id": "CH01",
+    "name": "AWS Organization",
+    "files": [
+        "infrastructure/aws/main.tf",
+        "infrastructure/aws/variables.tf",
+        "infrastructure/aws/versions.tf"
+    ],
+    "validation": "terraform validate",
+    "visual_verification": "Generate 'plan_report.html' from 'terraform plan' output."
+}
