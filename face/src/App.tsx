@@ -1,48 +1,26 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { LoginForm } from './features/auth/LoginForm';
+import { LoginPage } from './features/auth/LoginForm';
+import { DashboardLayout } from './components/layout/DashboardLayout';
 import { DashboardPage } from './pages/DashboardPage';
-import { SignupPage } from './pages/SignupPage';
 import { GoogleCallbackPage } from './pages/GoogleCallbackPage';
-
-// Simple Auth Guard (Mock) - In real app, check context/redux/api
-function RequireAuth({ children }: { children: JSX.Element }) {
-  const token = localStorage.getItem('token');
-
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-  return children;
-}
+import { SignupPage } from './features/auth/SignupPage';
+import { InboxView } from './chapters/05_intelligence/InboxView';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={
-          <div className="min-h-screen bg-neutral-100 flex flex-col items-center justify-center p-4">
-            <div className="mb-8 text-center">
-              <h1 className="text-3xl font-bold text-slate-800">Spine + Face</h1>
-              <p className="text-slate-500">Frontend Integration Demo</p>
-            </div>
-            <LoginForm />
-          </div>
-        } />
-
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/auth/google/callback" element={<GoogleCallbackPage />} />
 
-        <Route path="/auth/google/callback" element={
-          <RequireAuth>
-            <GoogleCallbackPage />
-          </RequireAuth>
-        } />
-
-        <Route path="/dashboard" element={
-          <RequireAuth>
-            <DashboardPage />
-          </RequireAuth>
-        } />
-
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        {/* Protected Dashboard Routes */}
+        <Route path="/" element={<DashboardLayout />}>
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route path="dashboard" element={<DashboardPage />} />
+          {/* New Intelligence Route (Chapter 5) */}
+          <Route path="intelligence" element={<InboxView />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )
