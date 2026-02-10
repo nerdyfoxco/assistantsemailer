@@ -11,6 +11,14 @@ class GmailService:
     def __init__(self, email_repo: EmailRepository):
         self.email_repo = email_repo
 
+    async def get_user_credentials(self, user_id: str) -> Optional[Credentials]:
+        """Retrieves Google OAuth Credentials for a user."""
+        account = await self.email_repo.get_account_by_user(user_id)
+        if not account:
+            return None
+        token_data = json.loads(account.oauth_token_ref)
+        return self._get_credentials(token_data)
+
     def _get_credentials(self, token_data: dict) -> Credentials:
         return Credentials(
             token=token_data.get("access_token"),

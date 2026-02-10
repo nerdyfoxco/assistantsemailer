@@ -28,6 +28,7 @@ class WorkItemState(str, Enum):
 class TriageResult(BaseModel):
     """Output schema for the Triage process."""
     thread_id: str
+    message_id: str
     subject: str
     sender: str
     received_at: datetime
@@ -55,6 +56,7 @@ def triage_thread(thread_data: Dict[str, Any]) -> TriageResult:
             # Handle empty thread (shouldn't happen from API usually, but defensive)
             return TriageResult(
                 thread_id=t_id,
+                message_id="unknown",
                 subject="(No Messages)",
                 sender="unknown",
                 received_at=datetime.utcnow(),
@@ -65,6 +67,7 @@ def triage_thread(thread_data: Dict[str, Any]) -> TriageResult:
 
         # Look at the last message for current state
         last_msg = messages[-1]
+        msg_id = last_msg.get("id", "unknown")
         payload = last_msg.get("payload", {})
         headers = payload.get("headers", [])
         
@@ -86,6 +89,7 @@ def triage_thread(thread_data: Dict[str, Any]) -> TriageResult:
         # Fallback for severe malformed data
         return TriageResult(
             thread_id=thread_data.get("id", "error"),
+            message_id="error",
             subject="Error Processing Thread",
             sender="error",
             received_at=datetime.utcnow(),
@@ -127,6 +131,7 @@ def triage_thread(thread_data: Dict[str, Any]) -> TriageResult:
     # 3. Construct Result (Schema Compliance)
     return TriageResult(
         thread_id=t_id,
+        message_id=msg_id,
         subject=subject,
         sender=sender,
         received_at=received_at,
