@@ -1,7 +1,7 @@
 
-- [x] **UMP-40-01**: User Onboarding (Signup -> Dashboard). <!-- id: 4100 -->
-    - [x] **Specs**: Define `signup` flow in `contracts/auth`. <!-- id: 4101 -->
-    - [x] **Backend**: Implement `POST /auth/signup`. <!-- id: 4102 -->
-    - [x] **Frontend**: Create `SignupPage.tsx` and connect to API. <!-- id: 4103 -->
-    - [x] **Verify**: New user can sign up and land on Dashboard. <!-- id: 4104 -->
-    - [x] **Seal**: Commit & Push. <!-- id: 4105 -->
+    - [x] **UMP-40-02**: Gmail Integration (OAuth2). <!-- id: 4200 -->
+        - [x] **Specs**: Define `GmailProvider` contract. <!-- id: 4201 -->
+        - [x] **Backend**: Implement `GET /auth/google/login` & `callback`. <!-- id: 4202 -->
+        - [x] **Frontend**: Add "Connect Gmail" button & flow. <!-- id: 4203 -->
+        - [x] **Verify**: Successful OAuth dance + Token storage. <!-- id: 4204 -->
+        - [x] **Seal**: Commit & Push. <!-- id: 4205 -->

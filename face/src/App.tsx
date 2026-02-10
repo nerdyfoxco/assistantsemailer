@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LoginForm } from './features/auth/LoginForm';
 import { DashboardPage } from './pages/DashboardPage';
 import { SignupPage } from './pages/SignupPage';
+import { GoogleCallbackPage } from './pages/GoogleCallbackPage';
 
 // Simple Auth Guard (Mock) - In real app, check context/redux/api
 function RequireAuth({ children }: { children: JSX.Element }) {
@@ -28,6 +29,12 @@ function App() {
         } />
 
         <Route path="/signup" element={<SignupPage />} />
+
+        <Route path="/auth/google/callback" element={
+          <RequireAuth>
+            <GoogleCallbackPage />
+          </RequireAuth>
+        } />
 
         <Route path="/dashboard" element={
           <RequireAuth>

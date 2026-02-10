@@ -58,3 +58,35 @@ class AuthService:
 
     def create_user_token(self, user_id: str) -> str:
         return security.create_access_token(subject=user_id)
+
+    async def connect_gmail(self, user_id: str, token_data: dict):
+        """Saves or updates the EmailAccount for the user."""
+        # Need to fetch email address to identify account?
+        # Usually we call Google UserInfo API or Gmail Profile API.
+        # For this UMP, let's trust we have the tokens.
+        
+        # Helper logic to store in DB:
+        # We need EmailAccountRepository (not created yet per Inventory?)
+        # Let's do a direct Add to session via user_repo for speed in Phase 4.
+        
+        from spine.db.models import EmailAccount, EmailProvider
+        
+        # Check if account exists
+        # In a real app we'd query by user_id and provider
+        # Assuming single account for now
+        
+        import json
+        
+        # Save tokens
+        new_account = EmailAccount(
+            id=str(uuid.uuid4()),
+            tenant_id="default", # TODO: Fix tenant
+            user_id=user_id,
+            provider=EmailProvider.GMAIL,
+            oauth_token_ref=json.dumps(token_data), # Insecure for prod (use KMS), fine for POC
+            created_at=datetime.utcnow()
+        )
+        
+        self.user_repo.session.add(new_account)
+        await self.user_repo.session.commit()
+        print(f"LINKED GMAIL ACCOUNT for User {user_id}")

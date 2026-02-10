@@ -40,12 +40,10 @@ export function LoginForm() {
         setIsLoading(true);
         setError(null);
         try {
-            const formData = new URLSearchParams();
-            formData.append('username', data.username);
-            formData.append('password', data.password);
-
-            const response = await api.post('/auth/login', formData, {
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            // Backend expects JSON { email, password }
+            const response = await api.post('/auth/login', {
+                email: data.username,
+                password: data.password
             });
 
             const { access_token } = response.data;
@@ -59,11 +57,13 @@ export function LoginForm() {
         }
     };
 
-    if (token) {
-        // Redirect immediately
-        navigate('/dashboard');
-        return null; // Or loader
-    }
+    useEffect(() => {
+        if (token) {
+            navigate('/dashboard');
+        }
+    }, [token, navigate]);
+
+    if (token) return null;
 
     return (
         <div className="w-full max-w-sm mx-auto p-6 bg-card border rounded-lg shadow-sm">

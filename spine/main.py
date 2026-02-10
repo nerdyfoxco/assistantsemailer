@@ -42,7 +42,10 @@ async def options_handler(request: Request, full_path: str):
     return response
 
 from spine.api.v1.api import api_router
+from spine.api.v1.endpoints import auth
 app.include_router(api_router, prefix=settings.API_V1_STR)
+# Mount Auth router at root for Google OAuth Callback compatibility
+app.include_router(auth.router, prefix="/auth", tags=["auth"])
 
 @app.get("/health", status_code=200)
 def health_check():

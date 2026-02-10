@@ -1,35 +1,26 @@
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
-$url = "http://localhost:3005"
-$screenshotPath = "c:\Users\Admin\.gemini\Workspaces\Email Systems\face\auth_report.png"
-
-Write-Host "Opening Frontend: $url"
+$token = Get-Content "c:\Users\Admin\.gemini\Workspaces\Email Systems\face\token.txt"
+$dashboardUrl = "http://localhost:3006/login?token=$token"
+$reportPath = "c:\Users\Admin\.gemini\Workspaces\Email Systems\face\auth_report.png"
 $wshell = New-Object -ComObject WScript.Shell
-Start-Process "msedge" $url
 
-Write-Host "Waiting 8 seconds for page load..."
-Start-Sleep -Seconds 8
+Write-Host "Opening Dashboard: $dashboardUrl"
+Start-Process "msedge" $dashboardUrl
 
-# Try to bring to front
-Write-Host "Focusing window..."
-try {
-    $wshell.AppActivate("Vite + React")
-}
-catch {
-    Write-Host "Could not focus window, continuing..."
-}
-Start-Sleep -Seconds 2
+Write-Host "Waiting 5 seconds for page load..."
+Start-Sleep -Seconds 5
+
+Write-Host "Focusing..."
+try { $wshell.AppActivate("Vite + React") } catch {}
+Start-Sleep -Seconds 1
 
 Write-Host "Capturing screen..."
 $bmp = New-Object System.Drawing.Bitmap([System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width, [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height)
 $graphics = [System.Drawing.Graphics]::FromImage($bmp)
 $graphics.CopyFromScreen([System.Drawing.Point]::Empty, [System.Drawing.Point]::Empty, $bmp.Size)
-
-Write-Host "Saving to: $screenshotPath"
-$bmp.Save($screenshotPath, [System.Drawing.Imaging.ImageFormat]::Png)
-
+$bmp.Save($reportPath, [System.Drawing.Imaging.ImageFormat]::Png)
 $graphics.Dispose()
 $bmp.Dispose()
-
-Write-Host "Screenshot captured successfully."
+Write-Host "Saved to $reportPath"
