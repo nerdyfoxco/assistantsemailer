@@ -89,6 +89,11 @@ class Email(Base):
     cc_emails: Mapped[Optional[str]] = mapped_column(String)
     subject: Mapped[Optional[str]] = mapped_column(String)
     received_at: Mapped[datetime] = mapped_column(DateTime)
+    gmail_id: Mapped[str] = mapped_column(String, index=True, nullable=True) # Gmail Message ID
+    snippet: Mapped[Optional[str]] = mapped_column(String)
+    body_text: Mapped[Optional[str]] = mapped_column(String) # Plain text body
+    body_html: Mapped[Optional[str]] = mapped_column(String) # HTML body
+    is_read: Mapped[bool] = mapped_column(Boolean, default=False)
     direction: Mapped[Direction] = mapped_column(SAEnum(Direction))
 
 class WorkItem(Base):
