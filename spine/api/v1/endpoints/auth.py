@@ -20,12 +20,18 @@ async def login_access_token(
     form_data: LoginRequest, # Using JSON body instead of Form for easier API testing/consistency with modern SPAs
     service: AuthService = Depends(get_auth_service)
 ) -> Any:
-    user = await service.authenticate_user(form_data.email, form_data.password)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Incorrect email or password",
-        )
+    try:
+        user = await service.authenticate_user(form_data.email, form_data.password)
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Incorrect email or password",
+            )
+    except Exception as e:
+        print(f"LOGIN ERROR: {e}")
+        import traceback
+        traceback.print_exc()
+        raise e
     
     access_token_expires = timedelta(minutes=config.settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = service.create_user_token(user.id)

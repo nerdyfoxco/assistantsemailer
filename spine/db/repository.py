@@ -1,7 +1,24 @@
 from typing import Generic, TypeVar, Type, Optional, List, Any
 from sqlalchemy import select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
-from spine.db.base import Base
+from spine.db.base import Base # Assuming User is a model and might be imported from here or a similar models file.
+from spine.db.models import User # Added this import based on the new class
+
+class UserRepository:
+    def __init__(self, session: AsyncSession):
+        self.session = session
+
+    async def get(self, id: str) -> Optional[User]:
+        return await self.session.get(User, id)
+
+    async def get_by_email(self, email: str) -> Optional[User]:
+        result = await self.session.execute(select(User).where(User.email == email))
+        return result.scalars().first()
+
+    async def create(self, user: User) -> User:
+        self.session.add(user)
+        # await self.session.commit() # moved to service layer usually
+        return user
 
 ModelType = TypeVar("ModelType", bound=Base)
 

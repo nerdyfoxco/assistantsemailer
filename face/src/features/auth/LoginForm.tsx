@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { api } from '../../lib/api';
 import { cn } from '../../lib/utils';
 import { Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const loginSchema = z.object({
     username: z.string().email("Invalid email address"),
@@ -17,6 +18,19 @@ export function LoginForm() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
+    const navigate = useNavigate();
+    const [searchParams] = useState(new URLSearchParams(window.location.search));
+
+    useEffect(() => {
+        const urlToken = searchParams.get('token');
+        if (urlToken) {
+            localStorage.setItem('token', urlToken);
+            setToken(urlToken);
+            // navigate('/dashboard'); // Remove token from URL for cleanliness, but keep it simple
+            // Force navigate to clean URL
+            window.location.href = '/dashboard';
+        }
+    }, [searchParams, navigate]);
 
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
@@ -26,11 +40,6 @@ export function LoginForm() {
         setIsLoading(true);
         setError(null);
         try {
-            // Note: Backend expects generic form data for OAuth2 usually, but let's try JSON first based on our implementation
-            // Or requests typically use URLSearchParams for OAuth2 password flow.
-            // Let's check `auth_service.py`... 
-            // Fastapi `OAuth2PasswordRequestForm` expects form-data.
-
             const formData = new URLSearchParams();
             formData.append('username', data.username);
             formData.append('password', data.password);
@@ -42,6 +51,7 @@ export function LoginForm() {
             const { access_token } = response.data;
             localStorage.setItem('token', access_token);
             setToken(access_token);
+            navigate('/dashboard');
         } catch (err: any) {
             setError(err.response?.data?.detail || "Login failed");
         } finally {
@@ -49,24 +59,10 @@ export function LoginForm() {
         }
     };
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        setToken(null);
-    }
-
     if (token) {
-        return (
-            <div className="p-6 bg-card border rounded-lg shadow-sm text-center">
-                <h2 className="text-xl font-semibold text-green-600 mb-4">Authenticated!</h2>
-                <p className="text-muted-foreground mb-4">Token stored in LocalStorage.</p>
-                <button
-                    onClick={handleLogout}
-                    className="px-4 py-2 bg-destructive text-destructive-foreground rounded-md hover:bg-destructive/90"
-                >
-                    Logout
-                </button>
-            </div>
-        )
+        // Redirect immediately
+        navigate('/dashboard');
+        return null; // Or loader
     }
 
     return (
