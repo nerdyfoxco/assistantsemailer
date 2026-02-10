@@ -10,3 +10,8 @@ class TokenData(BaseModel):
 class LoginRequest(BaseModel):
     email: str
     password: str # For Phase 1 we might just use Email-Only login via Magic Link, but for now Standard PW or Mock
+
+class SignupRequest(BaseModel):
+    email: str
+    password: str
+    name: str

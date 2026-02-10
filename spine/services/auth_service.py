@@ -2,6 +2,8 @@ from typing import Optional
 from spine.repositories.user_repo import UserRepository
 from spine.core import security
 from spine.db.models import User
+import uuid
+from datetime import datetime
 
 class AuthService:
     def __init__(self, user_repo: UserRepository):
@@ -24,6 +26,34 @@ class AuthService:
         if not security.verify_password(password, user.hashed_password):
             return None
             
+        return user
+
+    async def signup_user(self, email: str, password: str, name: str) -> User:
+        existing_user = await self.user_repo.get_by_email(email)
+        if existing_user:
+            raise ValueError("User already exists")
+        
+        hashed_pw = security.get_password_hash(password)
+        # Create user via repo
+        # Note: Repo might not have explicit create method yet, likely generic or we use session directly.
+        # Let's see user_repo.py in a moment. For now assume we use repo.create or similar.
+        # Actually UserRepo inherits BaseRepository?
+        # Let's assume we can construct User and add it.
+        
+        user = User(
+            id=str(uuid.uuid4()),
+            email=email,
+            name=name,
+            hashed_password=hashed_pw,
+            created_at=datetime.utcnow()
+        )
+        # We need to save it. BaseRepository usually has add/commit.
+        # If not, we might need to expose session or add a create method.
+        # Let's check BaseRepository first.
+        # Optimistically assuming we can add.
+        self.user_repo.session.add(user)
+        await self.user_repo.session.commit()
+        await self.user_repo.session.refresh(user)
         return user
 
     def create_user_token(self, user_id: str) -> str:

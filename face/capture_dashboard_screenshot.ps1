@@ -2,7 +2,7 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 $token = Get-Content "c:\Users\Admin\.gemini\Workspaces\Email Systems\face\token.txt"
-$frontendUrl = "http://localhost:3006/login?token=$token"
+$frontendUrl = "http://localhost:3006/signup?token=$token"
 $screenshotPath = "c:\Users\Admin\.gemini\Workspaces\Email Systems\face\dashboard_report.png"
 
 Write-Host "Opening Frontend: $frontendUrl"

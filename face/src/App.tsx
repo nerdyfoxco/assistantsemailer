@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LoginForm } from './features/auth/LoginForm';
 import { DashboardPage } from './pages/DashboardPage';
+import { SignupPage } from './pages/SignupPage';
 
 // Simple Auth Guard (Mock) - In real app, check context/redux/api
 function RequireAuth({ children }: { children: JSX.Element }) {
@@ -25,6 +26,8 @@ function App() {
             <LoginForm />
           </div>
         } />
+
+        <Route path="/signup" element={<SignupPage />} />
 
         <Route path="/dashboard" element={
           <RequireAuth>

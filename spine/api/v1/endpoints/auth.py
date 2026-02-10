@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from spine.db.database import get_db
-from spine.contracts.auth_dto import Token, LoginRequest
+from spine.contracts.auth_dto import Token, LoginRequest, SignupRequest
 from spine.services.auth_service import AuthService
 from spine.repositories.user_repo import UserRepository
 from spine.core import config
@@ -36,6 +36,30 @@ async def login_access_token(
     access_token_expires = timedelta(minutes=config.settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = service.create_user_token(user.id)
     
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+    }
+
+@router.post("/signup", response_model=Token)
+async def signup_access_token(
+    form_data: SignupRequest,
+    service: AuthService = Depends(get_auth_service)
+) -> Any:
+    try:
+        user = await service.signup_user(form_data.email, form_data.password, form_data.name)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e),
+        )
+    except Exception as e:
+        print(f"SIGNUP ERROR: {e}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail="Signup failed")
+    
+    access_token = service.create_user_token(user.id)
     return {
         "access_token": access_token,
         "token_type": "bearer",
