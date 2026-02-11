@@ -10,6 +10,17 @@ This project implements a secure, scalable email system functionality for Assist
 - **Phase 1**: Infrastructure (AWS Organization, VPC, EKS, RDS, Redis, S3, CI/CD, Observability).
 - **Phase 2**: App Core (Backend API).
 
+## Functional Architecture (The "Brain")
+This system operates on a **Zero-Storage** principle to maximize privacy and security.
+
+1.  **The Pipe (Streamer)**: Connects to Gmail and streams emails into memory.
+2.  **The Logic (Triage)**: Analyzes Metadata (Subject, Sender, Date) *without* reading the body to determine Urgency and Category.
+3.  **The Memory (Processor)**: Saves a "WorkItem" (pointer) to the database, but *discards* the email body.
+4.  **The Interface (Live Proxy)**: When you click an email in the UI, the frontend fetches the body *live* from Gmail, keeping the backend database clean.
+5.  **The Hands (Action)**:
+    -   **Vault**: Securely stores encryption keys (PAN, DOB, etc.).
+    -   **Unlocker**: Decrypts attachments on-demand using Vault keys.
+
 
 > [!IMPORTANT]
 > **GOVERNANCE ENFORCEMENT**: This repository follows a strict "Governance First" approach. 

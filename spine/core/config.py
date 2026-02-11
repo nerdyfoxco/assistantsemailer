@@ -13,6 +13,8 @@ class Settings(BaseSettings):
         "http://localhost:8000",
         "http://localhost:3006",
         "http://127.0.0.1:3006",
+        "http://localhost:5200",
+        "http://localhost:5201",
     ]
 
     # SECURITY
@@ -26,6 +28,15 @@ class Settings(BaseSettings):
     # Strict Backend Callback as requested
     GOOGLE_REDIRECT_URI: str = "http://localhost:8000/auth/google/callback"
 
-    model_config = SettingsConfigDict(case_sensitive=True)
+    # LLM KEYS
+    GEMINI_API_KEY: Union[str, None] = None
+    OPENAI_API_KEY: Union[str, None] = None
+
+    model_config = SettingsConfigDict(
+        case_sensitive=True, 
+        env_file=".env", 
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
 
 settings = Settings()

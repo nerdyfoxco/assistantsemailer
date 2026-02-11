@@ -108,3 +108,38 @@ async def get_message_body(
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/attachment/{message_id}/{attachment_id}")
+async def get_attachment(
+    message_id: str,
+    attachment_id: str,
+    filename: str = "download", # Optional query param for better defaults
+    current_user: User = Depends(deps.get_current_user),
+    db: Session = Depends(deps.get_db)
+):
+    """
+    Streams raw attachment content.
+    """
+    from spine.repositories.email_repo import EmailRepository
+    email_repo = EmailRepository(db)
+    gmail_service = GmailService(email_repo)
+    creds = await gmail_service.get_user_credentials(current_user.id)
+    
+    if not creds:
+         raise HTTPException(status_code=400, detail="Gmail not connected")
+
+    proxy = LiveProxy()
+    try:
+        # Fetch bytes
+        file_bytes = await proxy.fetch_attachment(user_id="me", message_id=message_id, attachment_id=attachment_id, creds=creds)
+        
+        # Stream it back
+        return Response(
+            content=file_bytes,
+            media_type="application/octet-stream", # Or try to detect
+            headers={
+                "Content-Disposition": f'attachment; filename="{filename}"'
+            }
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

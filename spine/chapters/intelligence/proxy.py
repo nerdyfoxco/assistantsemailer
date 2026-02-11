@@ -13,16 +13,21 @@ from googleapiclient.errors import HttpError
 from googleapiclient.discovery import build
 
 # Allowed Tags for Bleach (Safe HTML)
+# Allowed Tags for Bleach (Safe HTML)
 ALLOWED_TAGS = [
     'a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i', 'li', 'ol', 'strong', 'ul',
-    'p', 'br', 'div', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'table', 'tbody', 'tr', 'td', 'th', 'thead',
-    'img', 'hr', 'pre'
+    'p', 'br', 'div', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 
+    'table', 'tbody', 'tr', 'td', 'th', 'thead', 'tfoot',
+    'img', 'hr', 'pre', 'style', 'center', 'font', 'u', 's', 'strike'
 ]
 
 ALLOWED_ATTRIBUTES = {
-    '*': ['class'],
-    'a': ['href', 'title', 'target'],
-    'img': ['src', 'alt', 'width', 'height']
+    '*': ['class', 'style', 'id', 'align', 'valign', 'bgcolor', 'width', 'height', 'color', 'face', 'size'],
+    'a': ['href', 'title', 'target', 'name'],
+    'img': ['src', 'alt', 'width', 'height', 'border', 'hspace', 'vspace'],
+    'table': ['border', 'cellpadding', 'cellspacing', 'width', 'bgcolor', 'align'],
+    'td': ['width', 'height', 'align', 'valign', 'bgcolor', 'colspan', 'rowspan'],
+    'th': ['width', 'height', 'align', 'valign', 'bgcolor', 'colspan', 'rowspan'],
 }
 
 class LiveProxy:
@@ -77,10 +82,11 @@ class LiveProxy:
                 elif mime == "text/plain":
                     best_text = part
                 
-                # 3. Recurse (handle multipart/alternative etc)
+            # 3. Recurse (handle multipart/alternative, mixed, related etc)
                 if part.get("parts"):
                     sub_html, sub_text = traverse(part["parts"])
-                    # Prefer inner match if found
+                    # Deepest match usually best, or prefer existing best?
+                    # Strategy: If we don't have a candidate yet, take the sub-candidate.
                     if sub_html and not best_html: best_html = sub_html
                     if sub_text and not best_text: best_text = sub_text
             
@@ -125,3 +131,21 @@ class LiveProxy:
             "mime_type": mime_type,
             "attachments": attachments
         }
+
+    async def fetch_attachment(self, user_id: str, message_id: str, attachment_id: str, creds: Any) -> bytes:
+        """
+        Fetches binary attachment data.
+        """
+        try:
+            service = self.service_builder('gmail', 'v1', credentials=creds, cache_discovery=False)
+            attachment = service.users().messages().attachments().get(
+                userId=user_id, messageId=message_id, id=attachment_id
+            ).execute()
+            
+            data = attachment.get("data", "")
+            # Decode Base64URL
+            cleaned_data = data.replace("-", "+").replace("_", "/")
+            return base64.b64decode(cleaned_data)
+            
+        except Exception as e:
+            raise RuntimeError(f"Failed to fetch attachment: {str(e)}")

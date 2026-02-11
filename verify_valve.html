@@ -1,0 +1,23 @@
+
+    <html>
+    <body style="font-family: sans-serif; padding: 20px;">
+        <h1>Valve Verification (UMP-60-02)</h1>
+        <table border="1" cellpadding="10" style="border-collapse: collapse;">
+            <tr><th>Test Case</th><th>To Address</th><th>Expected</th><th>Actual Result</th><th>Status</th></tr>
+    
+            <tr>
+                <td>Whitelist Allowed</td>
+                <td>friend@allowed.com</td>
+                <td>True (Sent)</td>
+                <td>True</td>
+                <td style="color: green; font-weight: bold;">PASS</td>
+            </tr>
+    
+            <tr>
+                <td>Whitelist Blocked</td>
+                <td>hacker@blocked.com</td>
+                <td>False (Blocked)</td>
+                <td>False</td>
+                <td style="color: green; font-weight: bold;">PASS</td>
+            </tr>
+    </table></body></html>

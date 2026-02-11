@@ -89,5 +89,13 @@ export const intelligenceService = {
     getMessageBody: async (messageId: string): Promise<ProxyResult> => {
         const response = await api.get<ProxyResult>(`/intelligence/body/${messageId}`);
         return response.data;
+    },
+
+    // 3. Download Attachment (Blob) -> UMP-50-06
+    downloadAttachment: async (messageId: string, attachmentId: string): Promise<Blob> => {
+        const response = await api.get(`/intelligence/attachment/${messageId}/${attachmentId}`, {
+            responseType: 'blob'
+        });
+        return response.data;
     }
 };

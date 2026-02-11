@@ -114,7 +114,7 @@ async def google_callback_get(
     # This keeps the "Link to User" logic secure in the second step.
 ):
     if error:
-        return RedirectResponse(f"http://localhost:3006/dashboard?error={error}")
+        return RedirectResponse(f"http://localhost:5201/dashboard?error={error}")
 
     try:
         import httpx
@@ -135,7 +135,7 @@ async def google_callback_get(
             
             if resp.status_code != 200:
                 print(f"GOOGLE TOKEN ERROR: {resp.text}")
-                return RedirectResponse(f"http://localhost:3006/dashboard?error=token_failed")
+                return RedirectResponse(f"http://localhost:5201/dashboard?error=token_failed")
             
             token_data = resp.json()
             # Encode tokens to pass to frontend (Validation step)
@@ -147,11 +147,11 @@ async def google_callback_get(
             
             # Redirect to Frontend Callback Handler
             # The Frontend will take this payload and enable the "Link" via API.
-            return RedirectResponse(f"http://localhost:3006/auth/google/callback?google_tokens={token_encoded}")
+            return RedirectResponse(f"http://localhost:5201/auth/google/callback?google_tokens={token_encoded}")
 
     except Exception as e:
         print(f"GOOGLE CALLBACK ERROR: {e}")
-        return RedirectResponse(f"http://localhost:3006/dashboard?error=server_error")
+        return RedirectResponse(f"http://localhost:5201/dashboard?error=server_error")
 
 class GoogleConnectRequest(BaseModel):
     tokens: str # JSON string of tokens

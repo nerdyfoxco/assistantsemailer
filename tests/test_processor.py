@@ -23,10 +23,11 @@ def processor(mock_db):
         
         p = IntelligenceProcessor(mock_db)
         # Setup Repo Mock
-        p.email_repo.get_account_by_user = AsyncMock()
-        p.email_repo.get_account_by_user.return_value = EmailAccount(
-            tenant_id=MOCK_TENANT_ID, user_id=MOCK_USER_ID
-        )
+        # Setup Repo Mock
+        async def get_acc(*args, **kwargs):
+            return EmailAccount(tenant_id=MOCK_TENANT_ID, user_id=MOCK_USER_ID)
+            
+        p.email_repo.get_account_by_user = get_acc
         # Setup Streamer Mock
         p.streamer.stream_recent_threads = MagicMock()
         

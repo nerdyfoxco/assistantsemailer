@@ -1,10 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { LoginPage } from './features/auth/LoginForm';
+import { LoginPage } from './pages/LoginPage';
 import { DashboardLayout } from './components/layout/DashboardLayout';
 import { DashboardPage } from './pages/DashboardPage';
 import { GoogleCallbackPage } from './pages/GoogleCallbackPage';
-import { SignupPage } from './features/auth/SignupPage';
+import { SignupPage } from './pages/SignupPage';
 import { InboxView } from './chapters/05_intelligence/InboxView';
+import { MindProvider } from './chapters/08_mind/MindContext';
 
 function App() {
   return (
@@ -19,7 +20,11 @@ function App() {
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<DashboardPage />} />
           {/* New Intelligence Route (Chapter 5) */}
-          <Route path="intelligence" element={<InboxView />} />
+          <Route path="intelligence" element={
+            <MindProvider>
+              <InboxView />
+            </MindProvider>
+          } />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import type { TriageResult, ProxyResult } from './intelligenceService'; // Type-only import
 import { intelligenceService } from './intelligenceService';
-import { AlertCircle, Mail, Shield, User, Zap, Paperclip, File } from 'lucide-react';
+import { Mail, Shield, User, Zap, Paperclip, File } from 'lucide-react';
+import { DecisionCard } from '../08_mind/DecisionCard';
 
 export function InboxView() {
     const [streamStatus, setStreamStatus] = useState<'idle' | 'streaming' | 'done' | 'error'>('idle');
@@ -43,12 +44,19 @@ export function InboxView() {
         }
 
         const fetchBody = async () => {
+            console.log("Fetching body for:", selectedId);
             setBodyLoading(true);
             setBodyData(null);
             try {
                 // Use selectedId (which is message_id now)
                 const data = await intelligenceService.getMessageBody(selectedId);
-                setBodyData(data);
+                console.log("Body Data Received:", data);
+                if (data && typeof data === 'object') {
+                    setBodyData(data);
+                } else {
+                    console.error("Invalid data received:", data);
+                    setErrorMsg("Invalid data received from server");
+                }
             } catch (err) {
                 console.error("Body Fetch Error", err);
                 setErrorMsg("Failed to load message body.");
@@ -88,7 +96,8 @@ export function InboxView() {
                 <div className="flex-1 overflow-y-auto p-3 space-y-2">
                     {errorMsg && (
                         <div className="p-3 bg-red-50 border border-red-100 rounded-lg text-sm text-red-600 flex items-center gap-2">
-                            <AlertCircle className="w-4 h-4" />
+                            {/* AlertCircle removed for safety */}
+                            <span>!</span>
                             {errorMsg}
                         </div>
                     )}
@@ -109,8 +118,8 @@ export function InboxView() {
                                 }`}
                         >
                             <div className="flex justify-between items-start mb-1">
-                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${getConfidenceColor(item.confidence_band)}`}>
-                                    {item.confidence_score}% Cmd
+                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${getConfidenceColor(item.confidence_band || 'LOW')}`}>
+                                    {item.confidence_score || 0}% Cmd
                                 </span>
                                 {item.is_vip && (
                                     <Shield className="w-3.5 h-3.5 text-amber-500" />
@@ -119,10 +128,10 @@ export function InboxView() {
                             <h4 className="font-semibold text-gray-900 truncate text-sm mb-0.5">{item.subject || '(No Subject)'}</h4>
                             <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
                                 <User className="w-3 h-3" />
-                                <span className="truncate">{item.sender}</span>
+                                <span className="truncate">{item.sender || 'Unknown'}</span>
                             </div>
                             <div className="flex flex-wrap gap-1">
-                                {item.tags.map(tag => (
+                                {(item.tags || []).map(tag => (
                                     <span key={tag} className="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded border border-gray-200">
                                         #{tag}
                                     </span>
@@ -133,26 +142,30 @@ export function InboxView() {
                 </div>
             </div>
 
-            {/* Right: Message View (Proxy) */}
+            {/* Right Panel: Detail View */}
             <div className="md:col-span-2 flex flex-col h-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="p-6 border-b border-gray-100 min-h-[5rem] flex flex-col justify-center">
                     {selectedId ? (
-                        items.find(i => i.message_id === selectedId) && (
+                        items.find(i => i.message_id === selectedId) ? (
                             <div>
                                 <h2 className="text-xl font-bold text-gray-900 leading-tight">
-                                    {items.find(i => i.message_id === selectedId)?.subject}
+                                    {items.find(i => i.message_id === selectedId)?.subject ?? 'Unknown Subject'}
                                 </h2>
                                 <div className="text-sm text-gray-500 mt-1 flex items-center gap-2">
-                                    <span className="font-medium text-gray-700">{items.find(i => i.message_id === selectedId)?.sender}</span>
+                                    <span className="font-medium text-gray-700">{items.find(i => i.message_id === selectedId)?.sender ?? 'Unknown Sender'}</span>
                                     <span className="text-gray-300">|</span>
-                                    <span>{items.find(i => i.message_id === selectedId)?.received_at}</span>
+                                    <span>{items.find(i => i.message_id === selectedId)?.received_at ?? ''}</span>
                                 </div>
+                                <div className="mt-4">
+                                    <DecisionCard messageId={selectedId} />
+                                </div>
+
                             </div>
-                        )
+                        ) : <div className="text-red-500">Item not found in cache</div>
                     ) : (
                         <div className="text-gray-400 font-medium flex items-center gap-2">
                             <Mail className="w-5 h-5" />
-                            Select an item to view body
+                            Select an item to view details
                         </div>
                     )}
                 </div>
@@ -166,28 +179,45 @@ export function InboxView() {
                         </div>
                     ) : bodyData ? (
                         <div className="prose prose-sm max-w-none text-gray-800">
-                            {/* DANGEROUSLY SET HTML (Sanitized by Backend Bleach) */}
-                            <div dangerouslySetInnerHTML={{ __html: bodyData.html }} />
-
-                            {/* Attachments Section */}
+                            {/* Attachments Section (Top) */}
                             {bodyData.attachments && bodyData.attachments.length > 0 && (
-                                <div className="mt-8 pt-4 border-t border-gray-100">
+                                <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-100">
                                     <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                                         <Paperclip className="w-3.5 h-3.5" />
                                         Attachments ({bodyData.attachments.length})
                                     </h4>
                                     <div className="flex flex-wrap gap-2">
                                         {bodyData.attachments.map((att, idx) => (
-                                            <div key={idx} className="group flex items-center gap-3 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg hover:border-purple-200 hover:bg-purple-50 transition-colors cursor-default">
-                                                <div className="p-1.5 bg-white rounded border border-gray-100 group-hover:border-purple-100">
+                                            <div
+                                                key={idx}
+                                                onClick={async (e) => {
+                                                    e.preventDefault();
+                                                    try {
+                                                        const blob = await intelligenceService.downloadAttachment(selectedId!, att.attachment_id);
+                                                        const url = window.URL.createObjectURL(blob);
+                                                        const a = document.createElement('a');
+                                                        a.href = url;
+                                                        a.download = att.filename || 'download';
+                                                        document.body.appendChild(a);
+                                                        a.click();
+                                                        window.URL.revokeObjectURL(url);
+                                                        document.body.removeChild(a);
+                                                    } catch (err) {
+                                                        console.error("Download failed", err);
+                                                        alert("Failed to download attachment");
+                                                    }
+                                                }}
+                                                className="group flex items-center gap-3 px-3 py-2 bg-white border border-gray-200 rounded-lg hover:border-purple-200 hover:bg-purple-50 transition-colors cursor-pointer text-left"
+                                            >
+                                                <div className="p-1.5 bg-gray-50 rounded border border-gray-100 group-hover:border-purple-100">
                                                     <File className="w-4 h-4 text-blue-500" />
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-sm font-medium text-gray-700 max-w-[180px] truncate" title={att.filename}>
-                                                        {att.filename}
+                                                    <span className="text-sm font-medium text-gray-700 max-w-[180px] truncate group-hover:text-purple-700" title={att?.filename || 'File'}>
+                                                        {att?.filename || 'Download File'}
                                                     </span>
                                                     <span className="text-[10px] text-gray-400">
-                                                        {Math.round((att.size || 0) / 1024)} KB • {att.mime_type?.split('/')[1] || 'file'}
+                                                        {Math.round(Number(att?.size || 0) / 1024)} KB • {(att?.mime_type && att.mime_type.includes('/')) ? att.mime_type.split('/')[1] : 'file'}
                                                     </span>
                                                 </div>
                                             </div>
@@ -195,6 +225,17 @@ export function InboxView() {
                                     </div>
                                 </div>
                             )}
+
+                            {/* DANGEROUSLY SET HTML (Sanitized by Backend Bleach) */}
+                            <div className="min-h-[200px]">
+                                {bodyData.html ? (
+                                    <div dangerouslySetInnerHTML={{ __html: bodyData.html }} />
+                                ) : (
+                                    <div className="text-gray-500 italic border border-gray-100 p-8 rounded text-center bg-gray-50">
+                                        No content available for this message.
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     ) : (
                         !selectedId && (

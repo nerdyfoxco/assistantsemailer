@@ -10,10 +10,12 @@ Rules:
 """
 
 from typing import List, Optional
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import select
 from datetime import datetime
 import logging
+import uuid # Imported at top level
 
 from spine.db.models import WorkItem, Email, EmailProvider, Direction, WorkItemState, ConfidenceBand
 from spine.chapters.intelligence.streamer import GmailStreamer
@@ -23,7 +25,7 @@ from spine.repositories.email_repo import EmailRepository
 logger = logging.getLogger(__name__)
 
 class IntelligenceProcessor:
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         self.db = db
         self.email_repo = EmailRepository(db)
         self.streamer = GmailStreamer(self.email_repo)
@@ -40,9 +42,7 @@ class IntelligenceProcessor:
             "errors": 0
         }
 
-        # 1. Get Tenant ID for the user (Assumption: User belongs to one tenant for now, or we get it from context)
-        # For MVP, we'll fetch the user's primary email account to get the tenant_id
-        # This is a bit of a lookup, but necessary to link WorkItem -> Tenant
+        # 1. Get Tenant ID for the user
         account = await self.email_repo.get_account_by_user(user_id)
         if not account:
             logger.error(f"No email account found for user {user_id}")
@@ -60,24 +60,22 @@ class IntelligenceProcessor:
                     triage_result: TriageResult = triage_thread(thread_data)
                     
                     # 4. Idempotency Check
-                    # Check if Email already exists (by provider_message_id)
-                    # We treat message_id as unique provider identifier
-                    existing_email = self.db.query(Email).filter(
-                        Email.provider_message_id == triage_result.message_id
-                    ).first()
+                    stmt = select(Email).where(Email.provider_message_id == triage_result.message_id)
+                    result = await self.db.execute(stmt)
+                    existing_email = result.scalars().first()
 
                     if existing_email:
                         metrics["skipped_existing"] += 1
                         continue
 
                     # 5. Persist (Email Meta + WorkItem)
-                    self._save_work_item(triage_result, tenant_id, user_id)
+                    await self._save_work_item(triage_result, tenant_id, user_id)
                     metrics["processed"] += 1
                     
                 except Exception as e:
                     logger.error(f"Error processing thread {thread_data.get('id')}: {e}")
                     metrics["errors"] += 1
-                    # Continue to next item (don't halt entire stream on one bad apple)
+                    # Continue to next item
 
         except Exception as e:
             logger.critical(f"Fatal error in processor stream: {e}")
@@ -85,15 +83,12 @@ class IntelligenceProcessor:
 
         return metrics
 
-    def _save_work_item(self, meta: TriageResult, tenant_id: str, user_id: str):
+    async def _save_work_item(self, meta: TriageResult, tenant_id: str, user_id: str):
         """
         Saves Email Metadata and linked WorkItem in a single transaction.
         """
         try:
             # A. Create Email Record (Metadata only)
-            email_id = f"email_{meta.message_id}"  # Deterministic or UUID
-            # In real system, maybe use UUID, but for simplicity/idempotency we can allow duplicates to fail or use random
-            import uuid
             email_uuid = str(uuid.uuid4())
 
             email = Email(
@@ -113,7 +108,7 @@ class IntelligenceProcessor:
                 is_read=False
             )
             self.db.add(email)
-            self.db.flush() # Get ID if auto-generated, though we set it
+            await self.db.flush() 
 
             # B. Create WorkItem
             wi = WorkItem(
@@ -130,12 +125,12 @@ class IntelligenceProcessor:
             self.db.add(wi)
             
             # C. Commit
-            self.db.commit()
+            await self.db.commit()
 
         except IntegrityError:
-            self.db.rollback()
+            await self.db.rollback()
             # Race condition or duplicate
             logger.warning(f"Duplicate entry ignored for {meta.message_id}")
         except Exception as e:
-            self.db.rollback()
+            await self.db.rollback()
             raise e

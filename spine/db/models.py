@@ -38,6 +38,21 @@ class ConfidenceBand(str, enum.Enum):
     MEDIUM = "MEDIUM"
     LOW = "LOW"
 
+# PHASE 1.3 — SECRETS & ACTION (CHAPTER 6)
+class UserVault(Base):
+    """
+    UMP-60-03: Encrypted Secrets Storage per User.
+    Key-Value pairs (e.g. 'pan', 'dob') encrypted with App Secret.
+    """
+    __tablename__ = "user_vaults"
+    
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
+    key_name: Mapped[str] = mapped_column(String)  # e.g. "pan", "dob"
+    encrypted_value: Mapped[str] = mapped_column(String) # cyphertext
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
 # PHASE 1.1 — CORE IDENTITY & TENANCY
 class User(Base):
     __tablename__ = "users"

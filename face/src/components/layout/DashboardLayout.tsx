@@ -1,17 +1,19 @@
-import { ReactNode } from 'react';
+
 import { cn } from '../../lib/utils';
 import { LayoutDashboard, Inbox, User, LogOut } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom'; // Assuming react-router-dom will be installed or we use simple navigation
+import { Link, useLocation, Outlet } from 'react-router-dom';
 
-interface DashboardLayoutProps {
-    children: ReactNode;
-}
+// interface DashboardLayoutProps {
+//     children?: ReactNode;
+// }
 
-export function DashboardLayout({ children }: DashboardLayoutProps) {
-    // Mock navigation for now if router not set up, but let's assume we will add router
+export function DashboardLayout() {
+    const location = useLocation();
+
     const navItems = [
         { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
         { name: 'Work Items', href: '/work-items', icon: Inbox },
+        { name: 'Intelligence', href: '/intelligence', icon: Inbox }, // Added Intelligence Link
         { name: 'Profile', href: '/profile', icon: User },
     ];
 
@@ -24,16 +26,17 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 </div>
                 <nav className="flex-1 p-4 space-y-2">
                     {navItems.map((item) => (
-                        <div
+                        <Link
                             key={item.name}
+                            to={item.href}
                             className={cn(
                                 "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer",
-                                item.name === 'Dashboard' ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-neutral-100 hover:text-foreground"
+                                location.pathname === item.href ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-neutral-100 hover:text-foreground"
                             )}
                         >
                             <item.icon className="h-4 w-4" />
                             {item.name}
-                        </div>
+                        </Link>
                     ))}
                 </nav>
                 <div className="p-4 border-t">
@@ -45,8 +48,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 p-8 overflow-y-auto">
-                {children}
+            <main className="flex-1 p-8 overflow-y-auto w-full">
+                <Outlet />
             </main>
         </div>
     );
