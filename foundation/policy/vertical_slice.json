@@ -1,0 +1,21 @@
+{
+    "slice_id": "VS_EMAIL_REPLY_CORE",
+    "definition": "User → Inbox → Decision → Draft → Approval → Send → Close",
+    "required_components": {
+        "Connector": "Gmail receive + send",
+        "Engine": "Create one WorkItem",
+        "AI": "Generate draft",
+        "UI": "Show email + draft",
+        "Authority": "User approval required",
+        "Executor": "Send email",
+        "State": "Close WorkItem"
+    },
+    "completion_criteria": [
+        "A real email arrives",
+        "User sees it",
+        "User approves draft",
+        "Email is sent",
+        "Work item closes",
+        "Inbox is clean"
+    ]
+}

@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { admin } from '../../lib/api';
-import type { Tenant } from '../../lib/api';
+import type { Tenant } from '../../lib/types';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/table';

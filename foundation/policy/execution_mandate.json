@@ -1,9 +1,27 @@
 {
-    "authority": "build_v0_only",
-    "ignore_completeness": true,
-    "allowed_to_stub": true,
-    "stop_when": "vertical_slice_complete",
-    "do_not_expand_scope": true,
-    "authorized_by": "USER",
-    "timestamp": "2026-02-11T13:14:00Z"
+    "mandate_id": "EXEC_MIN_SAAS_V1",
+    "objective": "Deploy a usable SaaS that completes one real email reply loop.",
+    "priority": "SHIPPING_OVER_COMPLETENESS",
+    "expires_at": "v1.0_release",
+    "ignore_incompleteness_in": [
+        "multi_tenant_billing",
+        "team_workflows",
+        "advanced_classification",
+        "CRM_integrations",
+        "audit_reporting",
+        "analytics",
+        "admin_console",
+        "edge_case_handling"
+    ],
+    "ai_must_not": [
+        "add_new_chapters",
+        "generalize_for_future",
+        "refactor_for_elegance",
+        "complete_optional_features",
+        "block_on_missing_noncritical_rules"
+    ],
+    "stop_when": {
+        "vertical_slice": "VS_EMAIL_REPLY_CORE",
+        "status": "COMPLETE"
+    }
 }

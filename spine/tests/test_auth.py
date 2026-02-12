@@ -8,22 +8,22 @@ from spine.db.models import User
 from spine.core.security import get_password_hash
 
 @pytest.mark.asyncio
-async def test_login_access_token():
+async def test_login_access_token(db_session):
     # 1. Seed User
     uid = str(uuid.uuid4())
     email = f"auth_{uid}@example.com"
     password = "securepassword123"
     hashed = get_password_hash(password)
     
-    async with AsyncSessionLocal() as session:
-        user = User(
-            id=f"u_{uid}",
-            email=email,
-            name="Auth Test User",
-            hashed_password=hashed
-        )
-        session.add(user)
-        await session.commit()
+    # Use the shared session (from conftest) to ensure visibility
+    user = User(
+        id=f"u_{uid}",
+        email=email,
+        name="Auth Test User",
+        hashed_password=hashed
+    )
+    db_session.add(user)
+    await db_session.commit()
 
     # 2. Attempt Login
     transport = ASGITransport(app=app)
@@ -41,22 +41,22 @@ async def test_login_access_token():
     assert data["token_type"] == "bearer"
 
 @pytest.mark.asyncio
-async def test_login_fail_wrong_password():
+async def test_login_fail_wrong_password(db_session):
     # 1. Seed User
     uid = str(uuid.uuid4())
     email = f"auth_fail_{uid}@example.com"
     password = "securepassword123"
     hashed = get_password_hash(password)
     
-    async with AsyncSessionLocal() as session:
-        user = User(
-            id=f"u_{uid}",
-            email=email,
-            name="Auth Fail User",
-            hashed_password=hashed
-        )
-        session.add(user)
-        await session.commit()
+    # Use the shared session (from conftest) to ensure visibility
+    user = User(
+        id=f"u_{uid}",
+        email=email,
+        name="Auth Fail User",
+        hashed_password=hashed
+    )
+    db_session.add(user)
+    await db_session.commit()
 
     # 2. Attempt Login with WRONG password
     transport = ASGITransport(app=app)

@@ -1,0 +1,8 @@
+__pycache__
+.git
+.venv
+node_modules
+face/node_modules
+backend_test_failures.txt
+spine.db
+*.log

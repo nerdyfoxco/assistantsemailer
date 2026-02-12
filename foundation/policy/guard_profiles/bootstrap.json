@@ -1,0 +1,18 @@
+{
+    "mode": "bootstrap",
+    "relaxed_guards": {
+        "evidence_freshness": true,
+        "confidence_threshold": true,
+        "complete_schema_coverage": true,
+        "full_audit_trail": true
+    },
+    "never_relax": [
+        "user_approval_required",
+        "no_auto_send",
+        "tenant_isolation",
+        "authority_check"
+    ],
+    "expires_when": {
+        "deployment_mode": "PRODUCTION"
+    }
+}

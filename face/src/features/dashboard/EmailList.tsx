@@ -22,7 +22,7 @@ export function EmailList() {
         setIsLoading(true);
         try {
             const response = await api.get('/emails/');
-            setEmails(response.data);
+            setEmails(response);
         } catch (error) {
             console.error("Failed to fetch emails", error);
         } finally {

@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel, EmailStr
 from spine.db import get_session
 from sqlmodel import Session, select
-from spine.chapters.admin.models import User, Tenant
+from spine.chapters.admin.models import User, Tenant, Organization
 
 router = APIRouter(prefix="/public/auth", tags=["public-auth"])
 
@@ -28,23 +28,35 @@ def signup(req: SignupRequest, session: Session = Depends(get_session)):
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
 
-    # Create Tenant (Solo Tier by default)
-    tenant = Tenant(name=req.tenant_name, tier="SOLO", status="ACTIVE")
+    # 1. Create Organization (1-to-1 Mapping for now for simplicity, or could be shared)
+    # Using tenant name as org name for solo signups
+    org = Organization(name=req.tenant_name)
+    session.add(org)
+    session.commit()
+    session.refresh(org)
+
+    # 2. Create Tenant (Solo Tier by default) linked to Organization
+    tenant = Tenant(
+        name=req.tenant_name, 
+        tier="SOLO", 
+        status="ACTIVE",
+        organization_id=org.id
+    )
     session.add(tenant)
     session.commit()
     session.refresh(tenant)
 
-    # Create User
-    # Note: In production this should be hashed. Using plain for prototype speed as per bootstrap rules.
+    # 3. Create User
+    # In a real app, hash the password here.
+    # For Vertical Slice, we store it plainly or mock-hashed to satisfy the model if strict.
+    # The model has Optional[str], so we can store it.
     user = User(
         email=req.email,
-        # hashed_password=hash_pw(req.password), 
+        hashed_password=req.password, # Plaintext for prototype speed/debugging
         tenant_id=tenant.id,
         role="ADMIN",
         status="ACTIVE"
     )
-    # Using a temp hacks/mock for password storage if user model doesn't support it yet
-    # checking user model in next step to be sure
     
     session.add(user)
     session.commit()

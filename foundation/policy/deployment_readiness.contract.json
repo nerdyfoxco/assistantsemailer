@@ -1,58 +1,59 @@
 {
-    "deployment_id": "v0",
-    "deployment_name": "Single-user email reply loop",
-    "required_chapters": [
-        "CH00_GOVERNANCE_KERNEL",
-        "CH01_FOUNDATION_SPINE",
-        "CH02_TENANCY_AUTH",
-        "CH04_WORK_ENGINE",
-        "CH05_CONNECTORS_EYES",
-        "CH08_WEB_APP_SKIN"
-    ],
-    "required_capabilities": [
-        "user_onboarding",
-        "gmail_oauth_connect",
-        "fetch_single_email",
-        "deterministic_classification",
-        "draft_generation",
-        "user_review_and_edit",
-        "send_email",
-        "close_work_item"
-    ],
-    "explicitly_out_of_scope": [
-        "billing",
-        "teams",
-        "hitl",
-        "crm_updates",
-        "followups",
-        "calendar",
-        "attachments",
-        "unsubscribe_management",
-        "tone_learning_automation",
-        "advanced inbox organization"
-    ],
-    "allowed_stubs": [
-        "billing",
-        "audit_export",
-        "evidence_storage",
-        "policy_editor",
-        "confidence_scoring"
-    ],
-    "security_floor": {
-        "oauth_scopes_minimal": true,
-        "no_auto_send": true,
-        "user_must_approve": true,
-        "tenant_isolation": true,
-        "no_raw_email_storage": true
+    "contract_version": "v1.0",
+    "deployment_name": "assistants_co_v0",
+    "goal": "A real user successfully sends at least one real email using the system with final authority preserved.",
+    "environment": "production",
+    "must_be_true": {
+        "user_can": [
+            "sign_up",
+            "connect_gmail_or_outlook",
+            "see_one_email",
+            "see_a_draft_reply",
+            "approve_or_edit_draft",
+            "send_email"
+        ],
+        "system_can": [
+            "fetch_email_transiently",
+            "generate_draft_with_llm",
+            "present_draft_to_user",
+            "send_email_via_provider_api",
+            "log_action_with_source_attribution"
+        ]
     },
-    "vertical_slice_success_criteria": [
-        "real_user_connects_gmail",
-        "one_real_email_is_fetched",
-        "system_flags_reply_required",
-        "draft_is_generated",
-        "user_can_edit",
-        "email_is_sent_via_gmail_api",
-        "email_marked_closed"
+    "explicitly_not_required": {
+        "features": [
+            "teams",
+            "shared_inboxes",
+            "advanced_policy_engine",
+            "financial reconciliation",
+            "HITL marketplace",
+            "analytics dashboards",
+            "billing automation",
+            "enterprise compliance"
+        ],
+        "quality_bars": [
+            "perfect categorization",
+            "full inbox cleanup",
+            "policy generalization",
+            "zero manual review"
+        ]
+    },
+    "security_floor": {
+        "no_local_email_storage": true,
+        "no_auto_send_without_user": true,
+        "oauth_scopes_minimal": true,
+        "audit_log_required": true
+    },
+    "failure_conditions": [
+        "user_cannot_send_one_email",
+        "email_sent_without_user_approval",
+        "raw_email_persisted",
+        "system_requires_configuration_before_first_use"
     ],
-    "deployment_status": "READY"
+    "success_condition": "one real user completes one full email reply loop",
+    "authority": {
+        "final_decision": "USER",
+        "execution": "AI",
+        "override": "USER_ALWAYS_WINS"
+    }
 }

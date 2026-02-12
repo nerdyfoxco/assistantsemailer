@@ -1,0 +1,26 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies if any (none for now)
+
+# Copy Core Requirements
+# We probably don't have a requirements.txt yet, let's create one or install inline for simplicity in Vertical Slice
+# But best practice is requirements.txt. We'll generate one in a moment.
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy Source Code
+COPY main.py .
+COPY chapters/ ./chapters/
+COPY foundation/ ./foundation/
+COPY spine/ ./spine/
+
+# Default Env
+ENV PYTHONPATH=/app
+
+# Expose
+EXPOSE 8000
+
+# Run
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
