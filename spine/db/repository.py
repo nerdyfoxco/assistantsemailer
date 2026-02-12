@@ -32,6 +32,7 @@ class BaseRepository(Generic[ModelType]):
         # For our UUID strings, we usually pass them.
         instance = self.model(**kwargs)
         self.session.add(instance)
+        await self.session.commit()
         return instance
 
     async def get_by_id(self, id: str) -> ModelType | None:

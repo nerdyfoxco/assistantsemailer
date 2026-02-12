@@ -1,0 +1,9 @@
+{
+    "authority": "build_v0_only",
+    "ignore_completeness": true,
+    "allowed_to_stub": true,
+    "stop_when": "vertical_slice_complete",
+    "do_not_expand_scope": true,
+    "authorized_by": "USER",
+    "timestamp": "2026-02-11T13:14:00Z"
+}

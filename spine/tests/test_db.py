@@ -4,11 +4,7 @@ from sqlalchemy import select
 from spine.db.models import User
 from spine.db.database import AsyncSessionLocal, engine
 
-# Fixture for DB Session
-@pytest.fixture
-async def db_session():
-    async with AsyncSessionLocal() as session:
-        yield session
+# db_session provided by conftest.py
 
 # 1. Test Connection
 @pytest.mark.asyncio
@@ -19,12 +15,12 @@ async def test_db_connection():
 # 2. Test Create User
 @pytest.mark.asyncio
 async def test_create_user(db_session):
-    new_user = User(id="u_test_1", email="test@example.com", name="Test User")
+    new_user = User(id="u_test_1", email="test1@example.com", name="Test User")
     db_session.add(new_user)
     await db_session.commit()
     
     # Verify
-    stmt = select(User).where(User.email == "test@example.com")
+    stmt = select(User).where(User.email == "test1@example.com")
     result = await db_session.execute(stmt)
     user = result.scalar_one_or_none()
     assert user is not None
@@ -33,11 +29,16 @@ async def test_create_user(db_session):
 # 3. Test Read User
 @pytest.mark.asyncio
 async def test_read_user(db_session):
-    stmt = select(User).where(User.id == "u_test_1")
+    # Setup
+    new_user = User(id="u_test_2", email="test2@example.com", name="Test User 2")
+    db_session.add(new_user)
+    await db_session.commit()
+
+    stmt = select(User).where(User.id == "u_test_2")
     result = await db_session.execute(stmt)
     user = result.scalar_one_or_none()
     assert user is not None
-    assert user.name == "Test User"
+    assert user.name == "Test User 2"
 
 # 4. Test Duplicate Email (Constraint)
 @pytest.mark.asyncio

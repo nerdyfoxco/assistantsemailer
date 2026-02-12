@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional, List
-from sqlalchemy import String, DateTime, ForeignKey, Boolean, Enum as SAEnum
+from sqlalchemy import String, DateTime, ForeignKey, Boolean, Enum as SAEnum, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from spine.db.base import Base
@@ -28,6 +28,7 @@ class Direction(str, enum.Enum):
 
 class WorkItemState(str, enum.Enum):
     NEEDS_REPLY = "NEEDS_REPLY"
+    NEEDS_REVIEW = "NEEDS_REVIEW" # Blocked by ambiguity/policy
     WAITING = "WAITING"
     FYI = "FYI"
     DONE = "DONE"
@@ -93,6 +94,9 @@ class EmailAccount(Base):
 
 class Email(Base):
     __tablename__ = "emails"
+    __table_args__ = (
+        UniqueConstraint('tenant_id', 'provider_message_id', name='uq_emails_tenant_provider'),
+    )
     
     id: Mapped[str] = mapped_column(String, primary_key=True)
     provider_message_id: Mapped[str] = mapped_column(String, index=True)
@@ -110,6 +114,8 @@ class Email(Base):
     body_html: Mapped[Optional[str]] = mapped_column(String) # HTML body
     is_read: Mapped[bool] = mapped_column(Boolean, default=False)
     direction: Mapped[Direction] = mapped_column(SAEnum(Direction))
+    # PHASE 1.1: Tenant Isolation Repair (Stage 3: Constrain)
+    tenant_id: Mapped[str] = mapped_column(ForeignKey("tenants.id"), nullable=False)
 
 class WorkItem(Base):
     __tablename__ = "work_items"

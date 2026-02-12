@@ -13,16 +13,32 @@ class Valve:
     2. Rate Limiting (Not fully implemented in MVP, but hook exists).
     3. Whitelisting (Optional Dev Mode).
     4. Execution of Gmail Send API.
+    5. Global Kill Switch Check (Admin Safety).
     """
     
-    def __init__(self, service_builder: Any, dev_mode_whitelist: Optional[List[str]] = None):
+    def __init__(self, service_builder: Any, session_factory: Any, dev_mode_whitelist: Optional[List[str]] = None):
         self.service_builder = service_builder
+        self.session_factory = session_factory # Need session for DB check
         self.whitelist = dev_mode_whitelist or []
 
     async def send_email(self, user_id: str, creds: Any, raw_message: str, to_address: str) -> bool:
         """
         Executes the send.
         """
+        # 0. Global Kill Switch Check
+        from spine.chapters.admin.safety import SafetyManager
+        from sqlmodel import Session
+        
+        # Create a fresh session for the check to ensure latest state
+        # Assuming session_factory is a callable that returns a session or context manager
+        # If it's the engine, we bind it.
+        # Simplification: We blindly try to inspect the factory.
+        with Session(self.session_factory) as session:
+            safety = SafetyManager(session)
+            if safety.is_kill_switch_active():
+                logger.critical(f"BLOCKED: Kill Switch is ACTIVE. Email to {to_address} aborted.")
+                raise RuntimeError("Global Kill Switch is ACTIVE. Sending is halted.")
+
         # 1. Safety Check (Whitelist)
         if self.whitelist:
             if not any(allowed in to_address for allowed in self.whitelist):

@@ -1,16 +1,11 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState } from 'react';
+import type { ReactNode } from 'react';
 import { api } from '../../lib/api';
+import type { Decision } from '../../lib/api';
 
 // Types (should ideally generally be in a shared type file, but here for now)
 export type ActionType = 'REPLY' | 'ARCHIVE' | 'IGNORE' | 'ESCALATE';
-
-export interface Decision {
-    action: ActionType;
-    reasoning: string;
-    draft_body?: string;
-    tags: string[];
-}
 
 interface MindContextType {
     isThinking: boolean;
@@ -31,7 +26,7 @@ export const useMind = () => {
     return context;
 };
 
-export const MindProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const MindProvider = ({ children }: { children: ReactNode }) => {
     const [isThinking, setIsThinking] = useState(false);
     const [decision, setDecision] = useState<Decision | null>(null);
     const [error, setError] = useState<string | null>(null);

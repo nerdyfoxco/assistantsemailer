@@ -17,16 +17,18 @@ class EmailService:
         subject: str,
         received_at: datetime,
         direction: Direction,
+        tenant_id: str, # PHASE 1.1: Tenant Isolation
         cc_emails: Optional[str] = None
     ) -> Email:
         # 1. Idempotency Check
-        existing = await self.email_repo.get_by_provider_message_id(provider_message_id)
+        existing = await self.email_repo.get_by_provider_message_id(provider_message_id, tenant_id)
         if existing:
             return existing
 
         # 2. Create
         email = await self.email_repo.create(
             id=f"msg_{uuid.uuid4()}",
+            tenant_id=tenant_id,
             provider_message_id=provider_message_id,
             thread_id=thread_id,
             from_email=from_email,

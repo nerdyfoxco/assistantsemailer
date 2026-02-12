@@ -43,9 +43,22 @@ async def options_handler(request: Request, full_path: str):
 
 from spine.api.v1.api import api_router
 from spine.api.v1.endpoints import auth
+from spine.chapters.hitl.api import router as hitl_router
+from spine.chapters.admin import admin_router
 app.include_router(api_router, prefix=settings.API_V1_STR)
+# The following routers are not defined in the original document, but are included as per the instruction.
+# Assuming they are imported or defined elsewhere in the actual project context.
+# If these are not defined, this will cause a NameError.
+# app.include_router(users.router)
+# app.include_router(mind_endpoints.router)
+# app.include_router(intelligence_router)
+app.include_router(hitl_router)
+app.include_router(admin_router, prefix=settings.API_V1_STR)
 # Mount Auth router at root for Google OAuth Callback compatibility
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
+
+from spine.chapters.public.auth import router as public_auth_router
+app.include_router(public_auth_router)
 
 @app.get("/health", status_code=200)
 def health_check():

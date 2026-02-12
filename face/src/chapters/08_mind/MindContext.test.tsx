@@ -1,8 +1,8 @@
-
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { MindProvider, useMind, Decision } from './MindContext';
+import { MindProvider, useMind } from './MindContext';
 import { api } from '../../lib/api';
+import type { Decision } from '../../lib/api';
 import React, { ReactNode } from 'react';
 
 // Mock API

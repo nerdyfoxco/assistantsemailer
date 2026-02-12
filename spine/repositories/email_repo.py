@@ -15,6 +15,14 @@ class EmailRepository(BaseRepository[Email]):
         result = await self.session.execute(stmt)
         return result.scalars().first()
 
+    async def get_by_provider_message_id(self, provider_message_id: str, tenant_id: str) -> Optional[Email]:
+        stmt = select(Email).where(
+            Email.provider_message_id == provider_message_id,
+            Email.tenant_id == tenant_id
+        )
+        result = await self.session.execute(stmt)
+        return result.scalars().first()
+
     async def create_or_update(self, email_data: dict) -> Email:
         """
         Upserts an email based on gmail_id.

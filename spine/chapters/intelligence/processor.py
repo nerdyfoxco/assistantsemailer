@@ -59,8 +59,11 @@ class IntelligenceProcessor:
                     # 3. Triage
                     triage_result: TriageResult = triage_thread(thread_data)
                     
-                    # 4. Idempotency Check
-                    stmt = select(Email).where(Email.provider_message_id == triage_result.message_id)
+                    # 4. Idempotency Check (Scoped to Tenant)
+                    stmt = select(Email).where(
+                        Email.provider_message_id == triage_result.message_id,
+                        Email.tenant_id == tenant_id
+                    )
                     result = await self.db.execute(stmt)
                     existing_email = result.scalars().first()
 
@@ -93,6 +96,7 @@ class IntelligenceProcessor:
 
             email = Email(
                 id=email_uuid,
+                tenant_id=tenant_id, # PHASE 1.1: Tenant Isolation
                 provider_message_id=meta.message_id,
                 thread_id=meta.thread_id,
                 from_email=meta.sender,
