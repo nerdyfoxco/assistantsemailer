@@ -1,0 +1,67 @@
+{
+    "ump_id": "UMP-0013",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-03",
+    "title": "Implement Orchestrator Engine",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0013/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "chapters/brain/topic-orchestration/src/**",
+            "chapters/brain/topic-orchestration/test/**",
+            "chapters/brain/topic-orchestration/ump/**"
+        ],
+        "forbidden_paths": [
+            "chapters/legs/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "chapters/brain/topic-orchestration/src/engine.ts",
+            "operation": "create",
+            "context": "Core Logic.",
+            "purpose": "Bind consumers/producers.",
+            "connectivity": {
+                "imports": [
+                    "./events/starter",
+                    "./events/scheduler",
+                    "./events/consumer",
+                    "./events/producer"
+                ],
+                "pipes_produced": [],
+                "pipes_consumed": []
+            },
+            "build_prompt": "Class OrchestratorEngine. bind(starter, scheduler, consumer). onStart -> schedule step. onStepCompleted -> log/finish.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0013/spec.engine.ts.json"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/test/engine.test.ts",
+            "operation": "create",
+            "context": "Unit Test.",
+            "purpose": "Verify flow.",
+            "build_prompt": "Mock deps. Verify start triggers schedule.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0013/spec.engine.test.ts.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ],
+        "acceptance_criteria": [
+            "Engine translates events correcty"
+        ]
+    }
+}

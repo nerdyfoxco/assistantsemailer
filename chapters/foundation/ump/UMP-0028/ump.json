@@ -1,0 +1,41 @@
+{
+    "ump_id": "UMP-0028",
+    "chapter_id": "CH-05",
+    "topic_id": "TP-01",
+    "phase_id": "PH-08",
+    "title": "Analyze Real World Tests",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/foundation/ump/UMP-0028/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "docs/uat/",
+        "allowed_paths": [
+            "docs/uat/test_cases.md",
+            "chapters/foundation/ump/**"
+        ],
+        "forbidden_paths": [],
+        "allowed_shared_paths": []
+    },
+    "files": [
+        {
+            "path": "docs/uat/test_cases.md",
+            "operation": "create",
+            "context": "Analysis.",
+            "purpose": "Summarize found tests.",
+            "build_prompt": "Read OneDrive files and summarize.",
+            "json_spec_path": "chapters/foundation/ump/UMP-0028/spec.uat.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "manual"
+        ],
+        "commands": [],
+        "acceptance_criteria": [
+            "Test cases identified"
+        ]
+    }
+}

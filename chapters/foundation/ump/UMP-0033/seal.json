@@ -1,0 +1,12 @@
+{
+    "ump_id": "UMP-0033",
+    "sealed_at": "2026-02-13T10:00:00Z",
+    "files": {
+        "ears_gateway": "RUNNING",
+        "browser_test": "PASSED"
+    },
+    "tests": {
+        "ingestion_flow": "VERIFIED_BY_BROWSER_TRIGGER"
+    },
+    "agent_id": "canonical-ump-execution"
+}

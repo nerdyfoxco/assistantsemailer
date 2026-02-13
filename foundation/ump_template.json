@@ -1,0 +1,111 @@
+{
+    "ump_id": "UMP-####",
+    "chapter_id": "CH-##",
+    "topic_id": "TP-##",
+    "phase_id": "PH-##",
+    "title": "string",
+    "status": "planned|executed|sealed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "relative/path/to/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/<organ>/<topic>/",
+        "allowed_paths": [
+            "..."
+        ],
+        "forbidden_paths": [
+            "..."
+        ],
+        "allowed_shared_paths": [
+            "foundation/** (only if listed)",
+            "spine/** (only if listed)"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": [
+            {
+                "pipe_id": "pipe.example.name.v1",
+                "direction": "up|down|sideways",
+                "producer": "chapters/<organ>/<topic>",
+                "consumer": "chapters/<organ>/<topic>|external",
+                "schema_path": "foundation/contracts/pipes/schemas/<file>.schema.json",
+                "version": "1.0.0",
+                "compatibility": "backward|forward|strict"
+            }
+        ]
+    },
+    "files": [
+        {
+            "path": "relative/path",
+            "operation": "create|modify",
+            "context": "why it exists",
+            "purpose": "what it does",
+            "connectivity": {
+                "imports": [
+                    "..."
+                ],
+                "exports": [
+                    "..."
+                ],
+                "pipes_produced": [
+                    "..."
+                ],
+                "pipes_consumed": [
+                    "..."
+                ]
+            },
+            "build_prompt": "deterministic instructions to generate the file",
+            "json_spec_path": "relative/path/to/file.spec.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "..."
+        ],
+        "expected_artifacts": [
+            "optional"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "unit",
+            "contract",
+            "integration",
+            "e2e"
+        ],
+        "commands": [
+            "..."
+        ],
+        "acceptance_criteria": [
+            "..."
+        ]
+    },
+    "observability": {
+        "logging": [
+            "required fields"
+        ],
+        "metrics": [
+            "required metrics"
+        ],
+        "tracing": [
+            "required spans"
+        ]
+    },
+    "security": {
+        "data_classification": "public|internal|pii|phi",
+        "validation": [
+            "..."
+        ],
+        "redaction": [
+            "..."
+        ]
+    },
+    "risks": [
+        {
+            "risk": "string",
+            "mitigation": "string"
+        }
+    ]
+}

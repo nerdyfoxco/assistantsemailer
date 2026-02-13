@@ -1,0 +1,55 @@
+{
+    "ump_id": "UMP-0014",
+    "chapter_id": "CH-00",
+    "topic_id": "TP-00",
+    "phase_id": "PH-04",
+    "title": "In-Memory E2E Logic Verification",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "foundation/ump/UMP-0014/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "foundation/",
+        "allowed_paths": [
+            "tools/verify-e2e.ts",
+            "foundation/ump/**"
+        ],
+        "forbidden_paths": [],
+        "allowed_shared_paths": [
+            "foundation/**",
+            "chapters/**"
+        ]
+    },
+    "files": [
+        {
+            "path": "tools/verify-e2e.ts",
+            "operation": "create",
+            "context": "Integration Script.",
+            "purpose": "Verify Brain<->Legs loop.",
+            "connectivity": {
+                "imports": [
+                    "chapters/brain/topic-orchestration/dist/src/engine",
+                    "chapters/legs/topic-worker-runner/dist/src/events/consumer"
+                ],
+                "pipes_simulated": [
+                    "start->schedule->complete"
+                ]
+            },
+            "build_prompt": "Import Engine, Scheduler, Consumer from dist. Wire them via EventEmitters. Trigger start. Assert completion.",
+            "json_spec_path": "foundation/ump/UMP-0014/spec.verify-e2e.ts.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "integration"
+        ],
+        "commands": [
+            "npx ts-node tools/verify-e2e.ts"
+        ],
+        "acceptance_criteria": [
+            "All steps completed successfully"
+        ]
+    }
+}

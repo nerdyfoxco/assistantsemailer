@@ -1,0 +1,15 @@
+{
+    "ump_id": "UMP-0001",
+    "sealed_at": "2026-02-12T16:19:00Z",
+    "files": {
+        "src/server.ts": "sha256:PENDING_CALCULATION",
+        "src/index.ts": "sha256:PENDING_CALCULATION",
+        "test/smoke.test.ts": "sha256:PENDING_CALCULATION",
+        "package.json": "sha256:PENDING_CALCULATION",
+        "tsconfig.json": "sha256:PENDING_CALCULATION"
+    },
+    "tests": {
+        "smoke": "PASSED"
+    },
+    "agent_id": "canonical-ump-architect"
+}

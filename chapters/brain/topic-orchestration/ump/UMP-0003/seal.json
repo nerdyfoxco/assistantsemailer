@@ -1,0 +1,13 @@
+{
+    "ump_id": "UMP-0003",
+    "sealed_at": "2026-02-12T16:25:00Z",
+    "files": {
+        "foundation/src/testing/contract-runner.ts": "VALIDATED",
+        "test/contracts.workflow.started.test.ts": "PASSED",
+        "test/contracts.workflow.step.completed.test.ts": "PASSED"
+    },
+    "tests": {
+        "contract_checks": "PASSED"
+    },
+    "agent_id": "canonical-ump-architect"
+}

@@ -1,0 +1,31 @@
+{
+    "pipes": [
+        {
+            "pipe_id": "pipe.workflow.started.v1",
+            "direction": "down",
+            "producer": "chapters/brain/topic-orchestration",
+            "consumer": "chapters/brain/topic-orchestration",
+            "schema_path": "foundation/contracts/pipes/schemas/pipe.workflow.started.v1.schema.json",
+            "version": "1.0.0",
+            "compatibility": "strict"
+        },
+        {
+            "pipe_id": "pipe.workflow.step.completed.v1",
+            "direction": "up",
+            "producer": "chapters/legs/topic-worker-runner",
+            "consumer": "chapters/brain/topic-orchestration",
+            "schema_path": "foundation/contracts/pipes/schemas/pipe.workflow.step.completed.v1.schema.json",
+            "version": "1.0.0",
+            "compatibility": "strict"
+        },
+        {
+            "pipe_id": "pipe.step.scheduled.v1",
+            "direction": "down",
+            "producer": "chapters/brain/topic-orchestration",
+            "consumer": "chapters/legs/topic-worker-runner",
+            "schema_path": "foundation/contracts/pipes/schemas/pipe.step.scheduled.v1.schema.json",
+            "version": "1.0.0",
+            "compatibility": "strict"
+        }
+    ]
+}

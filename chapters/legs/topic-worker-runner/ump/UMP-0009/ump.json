@@ -1,0 +1,76 @@
+{
+    "ump_id": "UMP-0009",
+    "chapter_id": "CH-04",
+    "topic_id": "TP-01",
+    "phase_id": "PH-02",
+    "title": "Implement consumer for step.scheduled",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/legs/topic-worker-runner/ump/UMP-0009/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/legs/topic-worker-runner/",
+        "allowed_paths": [
+            "chapters/legs/topic-worker-runner/src/**",
+            "chapters/legs/topic-worker-runner/test/**",
+            "chapters/legs/topic-worker-runner/ump/**"
+        ],
+        "forbidden_paths": [
+            "chapters/brain/**"
+        ],
+        "allowed_shared_paths": [
+            "foundation/**"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "chapters/legs/topic-worker-runner/src/events/types.ts",
+            "operation": "create",
+            "context": "Type definitions.",
+            "purpose": "Strong typing.",
+            "build_prompt": "Interface StepScheduledEvent.",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0009/spec.types.ts.json"
+        },
+        {
+            "path": "chapters/legs/topic-worker-runner/src/events/consumer.ts",
+            "operation": "create",
+            "context": "Event consumer logic.",
+            "purpose": "Handle incoming work.",
+            "connectivity": {
+                "imports": [
+                    "events",
+                    "./types"
+                ],
+                "pipes_consumed": [
+                    "pipe.step.scheduled.v1"
+                ]
+            },
+            "build_prompt": "Class WorkerConsumer. Method handleStepScheduled(event). Emit internal 'executeStep'.",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0009/spec.consumer.ts.json"
+        },
+        {
+            "path": "chapters/legs/topic-worker-runner/test/consumer.test.ts",
+            "operation": "create",
+            "context": "Unit test.",
+            "purpose": "Verify consumption.",
+            "build_prompt": "Mock event. Verify emission.",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0009/spec.consumer.test.ts.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ],
+        "acceptance_criteria": [
+            "handleStepScheduled emits executeStep"
+        ]
+    }
+}

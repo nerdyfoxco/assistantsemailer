@@ -1,0 +1,60 @@
+{
+    "ump_id": "UMP-0018",
+    "chapter_id": "CH-02",
+    "topic_id": "TP-02",
+    "phase_id": "PH-04",
+    "title": "Legs Dispatcher & Registry",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/legs/topic-worker-runner/ump/UMP-0018/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/legs/topic-worker-runner/",
+        "allowed_paths": [
+            "chapters/legs/topic-worker-runner/src/executor/**",
+            "chapters/legs/topic-worker-runner/test/**",
+            "chapters/legs/topic-worker-runner/ump/**"
+        ],
+        "forbidden_paths": [],
+        "allowed_shared_paths": []
+    },
+    "files": [
+        {
+            "path": "chapters/legs/topic-worker-runner/src/executor/types.ts",
+            "operation": "create",
+            "context": "Handler Interfaces.",
+            "purpose": "Define StepHandler contract.",
+            "build_prompt": "Interface StepHandler { handle(inputs): Promise<outputs> }.",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0018/spec.types.ts.json"
+        },
+        {
+            "path": "chapters/legs/topic-worker-runner/src/executor/dispatcher.ts",
+            "operation": "create",
+            "context": "Dispatcher Logic.",
+            "purpose": "Route steps to handlers.",
+            "build_prompt": "Class Dispatcher. register(type, handler). dispatch(step).",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0018/spec.dispatcher.ts.json"
+        },
+        {
+            "path": "chapters/legs/topic-worker-runner/test/dispatcher.test.ts",
+            "operation": "create",
+            "context": "Unit Test.",
+            "purpose": "Verify routing.",
+            "build_prompt": "Test registration and execution.",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0018/spec.dispatcher.test.ts.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ],
+        "acceptance_criteria": [
+            "Dispatcher executes correct handler for step_type"
+        ]
+    }
+}

@@ -1,0 +1,43 @@
+{
+    "ump_id": "UMP-0026",
+    "chapter_id": "CH-04",
+    "topic_id": "TP-01",
+    "phase_id": "PH-07",
+    "title": "E2E Docker Verification",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/foundation/ump/UMP-0026/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "tools/",
+        "allowed_paths": [
+            "tools/verify-e2e-docker.js",
+            "chapters/foundation/ump/**"
+        ],
+        "forbidden_paths": [],
+        "allowed_shared_paths": []
+    },
+    "files": [
+        {
+            "path": "tools/verify-e2e-docker.js",
+            "operation": "create",
+            "context": "Verification Script.",
+            "purpose": "Verify full system in Docker.",
+            "build_prompt": "Node script using 'pg' and 'http'. Trigger workflow. Poll DB for completion.",
+            "json_spec_path": "chapters/foundation/ump/UMP-0026/spec.e2e.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "e2e"
+        ],
+        "commands": [
+            "node tools/verify-e2e-docker.js"
+        ],
+        "acceptance_criteria": [
+            "Workflow completes with success"
+        ]
+    }
+}

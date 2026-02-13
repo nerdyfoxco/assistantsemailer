@@ -1,0 +1,19 @@
+{
+    "name": "@chapters/brain-topic-orchestration",
+    "version": "0.1.0",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc",
+        "test": "node --test dist/test/"
+    },
+    "dependencies": {
+        "pg": "^8.11.3"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "@types/pg": "^8.11.0",
+        "ajv": "^8.17.1",
+        "ajv-formats": "^3.0.1",
+        "typescript": "^5.0.0"
+    }
+}

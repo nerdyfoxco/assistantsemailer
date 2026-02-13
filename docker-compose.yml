@@ -1,25 +1,71 @@
+version: '3.8'
+
 services:
-  backend:
+  brain:
     build:
       context: .
-      dockerfile: Dockerfile.backend
-    container_name: email-system-backend
+      dockerfile: chapters/brain/topic-orchestration/Dockerfile
+    image: brain-orchestration
     ports:
-      - "8000:8000"
-    volumes:
-      - ./token.json:/app/token.json
-      - ./credentials.json:/app/credentials.json
-    env_file:
-      - .env
-    restart: on-failure
-
-  frontend:
-    build:
-      context: ./face
-      dockerfile: Dockerfile.frontend
-    container_name: email-system-frontend
-    ports:
-      - "8080:80"
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DB_URL=postgresql://admin:password@postgres:5432/email_systems
+    restart: unless-stopped
     depends_on:
-      - backend
-    restart: on-failure
+      - postgres
+    networks:
+      - assistants-net
+
+  legs:
+    build:
+      context: .
+      dockerfile: chapters/legs/topic-worker-runner/Dockerfile
+    image: legs-worker-runner
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+    restart: unless-stopped
+    networks:
+      - assistants-net
+
+  ears:
+    build:
+      context: .
+      dockerfile: chapters/ears/topic-gmail-gateway/Dockerfile
+    image: ears-gmail-gateway
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - BRAIN_URL=http://brain:3000
+      - GMAIL_CLIENT_ID=${GMAIL_CLIENT_ID}
+      - GMAIL_CLIENT_SECRET=${GMAIL_CLIENT_SECRET}
+      - GMAIL_REFRESH_TOKEN=${GMAIL_REFRESH_TOKEN}
+    restart: unless-stopped
+    depends_on:
+      - brain
+    networks:
+      - assistants-net
+
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: email_systems
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - assistants-net
+
+networks:
+  assistants-net:
+    driver: bridge
+
+volumes:
+  postgres_data:

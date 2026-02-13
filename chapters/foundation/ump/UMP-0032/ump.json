@@ -1,0 +1,50 @@
+{
+    "ump_id": "UMP-0032",
+    "chapter_id": "CH-06",
+    "topic_id": "TP-03",
+    "phase_id": "PH-14",
+    "title": "Gmail Ingestion Logic",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/foundation/ump/UMP-0032/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/ears/topic-gmail-gateway/src/",
+        "allowed_paths": [
+            "chapters/ears/topic-gmail-gateway/src/ingestion.ts",
+            "chapters/ears/topic-gmail-gateway/src/index.ts",
+            "chapters/foundation/ump/**"
+        ],
+        "forbidden_paths": [],
+        "allowed_shared_paths": []
+    },
+    "files": [
+        {
+            "path": "chapters/ears/topic-gmail-gateway/src/ingestion.ts",
+            "operation": "create",
+            "context": "Ingestion Service.",
+            "purpose": "Orchestrate polling and pushing.",
+            "build_prompt": "Class IngestionService. loop() checks inbox, pushes to Brain URL.",
+            "json_spec_path": "chapters/foundation/ump/UMP-0032/spec.ingest.json"
+        },
+        {
+            "path": "chapters/ears/topic-gmail-gateway/src/index.ts",
+            "operation": "modify",
+            "context": "Entrypoint.",
+            "purpose": "Start Ingestion on boot.",
+            "build_prompt": "Instantiate IngestionService and start loop.",
+            "json_spec_path": "chapters/foundation/ump/UMP-0032/spec.index.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "integration"
+        ],
+        "commands": [],
+        "acceptance_criteria": [
+            "Events emitted to Brain"
+        ]
+    }
+}

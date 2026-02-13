@@ -1,0 +1,11 @@
+{
+    "ump_id": "UMP-0029",
+    "sealed_at": "2026-02-13T08:15:00Z",
+    "files": {
+        "gmail_inbox_view.png": "SHA256:CAPTURED"
+    },
+    "tests": {
+        "browser_check": "FAILED_AS_EXPECTED (No Fyxer Activity)"
+    },
+    "agent_id": "canonical-ump-execution"
+}

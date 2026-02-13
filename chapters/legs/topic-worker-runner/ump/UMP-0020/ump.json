@@ -1,0 +1,52 @@
+{
+    "ump_id": "UMP-0020",
+    "chapter_id": "CH-02",
+    "topic_id": "TP-02",
+    "phase_id": "PH-04",
+    "title": "HTTP Capability (Real Worker)",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/legs/topic-worker-runner/ump/UMP-0020/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/legs/topic-worker-runner/",
+        "allowed_paths": [
+            "chapters/legs/topic-worker-runner/src/handlers/**",
+            "chapters/legs/topic-worker-runner/test/**",
+            "chapters/legs/topic-worker-runner/ump/**"
+        ],
+        "forbidden_paths": [],
+        "allowed_shared_paths": []
+    },
+    "files": [
+        {
+            "path": "chapters/legs/topic-worker-runner/src/handlers/http.ts",
+            "operation": "create",
+            "context": "HTTP Handler.",
+            "purpose": "Real World Capability.",
+            "build_prompt": "Class HttpHandler implements StepHandler. type='http.request'. execute request.",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0020/spec.http.ts.json"
+        },
+        {
+            "path": "chapters/legs/topic-worker-runner/test/handlers.http.test.ts",
+            "operation": "create",
+            "context": "Unit Test.",
+            "purpose": "Verify request logic.",
+            "build_prompt": "Test GET/POST against a mock server.",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0020/spec.http.test.ts.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ],
+        "acceptance_criteria": [
+            "HttpHandler makes actual network calls"
+        ]
+    }
+}

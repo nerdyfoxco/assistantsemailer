@@ -1,0 +1,12 @@
+{
+    "ump_id": "UMP-0024",
+    "sealed_at": "2026-02-12T18:25:00Z",
+    "files": {
+        "src/persistence/postgres.ts": "SHA256:PENDING",
+        "test/persistence/postgres.test.ts": "PASSED"
+    },
+    "tests": {
+        "integration_tests": "PASSED"
+    },
+    "agent_id": "canonical-ump-execution"
+}

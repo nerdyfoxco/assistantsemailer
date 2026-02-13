@@ -1,0 +1,12 @@
+{
+    "ump_id": "UMP-0031",
+    "sealed_at": "2026-02-13T08:45:00Z",
+    "files": {
+        "src/client.ts": "SHA256:PENDING",
+        "test/client.test.ts": "SHA256:PENDING"
+    },
+    "tests": {
+        "unit_tests": "DEFERRED_TO_INTEGRATION"
+    },
+    "agent_id": "canonical-ump-execution"
+}

@@ -1,0 +1,54 @@
+{
+    "ump_id": "UMP-0030",
+    "chapter_id": "CH-06",
+    "topic_id": "TP-01",
+    "phase_id": "PH-14",
+    "title": "Gateway (Ears) Skeleton",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/foundation/ump/UMP-0030/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/ears/topic-gmail-gateway/",
+        "allowed_paths": [
+            "chapters/ears/topic-gmail-gateway/**",
+            "chapters/foundation/ump/**"
+        ],
+        "forbidden_paths": [],
+        "allowed_shared_paths": [
+            "foundation/**"
+        ]
+    },
+    "files": [
+        {
+            "path": "chapters/ears/topic-gmail-gateway/package.json",
+            "operation": "create",
+            "context": "Service Manifest.",
+            "purpose": "Define dependencies.",
+            "build_prompt": "Node service. Deps: express (or http), googleapis.",
+            "json_spec_path": "chapters/foundation/ump/UMP-0030/spec.pkg.json"
+        },
+        {
+            "path": "chapters/ears/topic-gmail-gateway/src/index.ts",
+            "operation": "create",
+            "context": "Entrypoint.",
+            "purpose": "Start server.",
+            "build_prompt": "Simple HTTP server with /healthz.",
+            "json_spec_path": "chapters/foundation/ump/UMP-0030/spec.index.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm test"
+        ],
+        "acceptance_criteria": [
+            "Server starts",
+            "/healthz returns 200"
+        ]
+    }
+}

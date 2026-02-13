@@ -1,0 +1,12 @@
+{
+    "ump_id": "UMP-0008",
+    "sealed_at": "2026-02-12T16:36:00Z",
+    "files": {
+        "src/server.ts": "SHA256:PENDING",
+        "test/smoke.test.ts": "PASSED"
+    },
+    "tests": {
+        "smoke_test": "PASSED"
+    },
+    "agent_id": "canonical-ump-execution"
+}

@@ -1,0 +1,16 @@
+{
+    "name": "@chapters/legs-topic-worker-runner",
+    "version": "0.1.0",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc",
+        "test": "node --test dist/test/"
+    },
+    "dependencies": {
+        "@assistants-co/foundation": "file:../../../foundation"
+    },
+    "devDependencies": {
+        "typescript": "^5.0.0",
+        "@types/node": "^20.0.0"
+    }
+}

@@ -1,0 +1,52 @@
+{
+    "ump_id": "UMP-0019",
+    "chapter_id": "CH-02",
+    "topic_id": "TP-02",
+    "phase_id": "PH-04",
+    "title": "Math Capability (Reference Worker)",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/legs/topic-worker-runner/ump/UMP-0019/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/legs/topic-worker-runner/",
+        "allowed_paths": [
+            "chapters/legs/topic-worker-runner/src/handlers/**",
+            "chapters/legs/topic-worker-runner/test/**",
+            "chapters/legs/topic-worker-runner/ump/**"
+        ],
+        "forbidden_paths": [],
+        "allowed_shared_paths": []
+    },
+    "files": [
+        {
+            "path": "chapters/legs/topic-worker-runner/src/handlers/math.ts",
+            "operation": "create",
+            "context": "Math Handler.",
+            "purpose": "Reference Implementation.",
+            "build_prompt": "Class MathHandler implements StepHandler. type='math.add'. add(a, b).",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0019/spec.math.ts.json"
+        },
+        {
+            "path": "chapters/legs/topic-worker-runner/test/handlers.math.test.ts",
+            "operation": "create",
+            "context": "Unit Test for Handler.",
+            "purpose": "Verify logic.",
+            "build_prompt": "Test handle({a:1, b:2}) returns {result:3}.",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0019/spec.math.test.ts.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ],
+        "acceptance_criteria": [
+            "MathHandler returns correct sum"
+        ]
+    }
+}

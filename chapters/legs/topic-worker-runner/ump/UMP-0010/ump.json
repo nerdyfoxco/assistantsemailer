@@ -1,0 +1,76 @@
+{
+    "ump_id": "UMP-0010",
+    "chapter_id": "CH-04",
+    "topic_id": "TP-01",
+    "phase_id": "PH-02",
+    "title": "Implement producer for step.completed",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/legs/topic-worker-runner/ump/UMP-0010/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/legs/topic-worker-runner/",
+        "allowed_paths": [
+            "chapters/legs/topic-worker-runner/src/**",
+            "chapters/legs/topic-worker-runner/test/**",
+            "chapters/legs/topic-worker-runner/ump/**"
+        ],
+        "forbidden_paths": [
+            "chapters/brain/**"
+        ],
+        "allowed_shared_paths": [
+            "foundation/**"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "chapters/legs/topic-worker-runner/src/events/types.ts",
+            "operation": "modify",
+            "context": "Add StepCompletedEvent types.",
+            "purpose": "Strong typing.",
+            "build_prompt": "Interface StepCompletedEvent (match contract).",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0010/spec.types.ts.json"
+        },
+        {
+            "path": "chapters/legs/topic-worker-runner/src/events/producer.ts",
+            "operation": "create",
+            "context": "Event emitter.",
+            "purpose": "Report completion.",
+            "connectivity": {
+                "imports": [
+                    "events",
+                    "crypto"
+                ],
+                "pipes_produced": [
+                    "pipe.workflow.step.completed.v1"
+                ]
+            },
+            "build_prompt": "Class WorkerProducer. emitStepCompleted(payload). Use crypto for event_id.",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0010/spec.producer.ts.json"
+        },
+        {
+            "path": "chapters/legs/topic-worker-runner/test/producer.test.ts",
+            "operation": "create",
+            "context": "Unit test.",
+            "purpose": "Verify emission.",
+            "build_prompt": "Mock event sink.",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0010/spec.producer.test.ts.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ],
+        "acceptance_criteria": [
+            "emitStepCompleted emits valid event"
+        ]
+    }
+}

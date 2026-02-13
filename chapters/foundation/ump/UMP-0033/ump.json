@@ -1,0 +1,52 @@
+{
+    "ump_id": "UMP-0033",
+    "chapter_id": "CH-06",
+    "topic_id": "TP-04",
+    "phase_id": "PH-14",
+    "title": "Dockerize Gmail Gateway",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/foundation/ump/UMP-0033/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/ears/topic-gmail-gateway/",
+        "allowed_paths": [
+            "chapters/ears/topic-gmail-gateway/Dockerfile",
+            "docker-compose.yml",
+            "chapters/foundation/ump/**"
+        ],
+        "forbidden_paths": [],
+        "allowed_shared_paths": []
+    },
+    "files": [
+        {
+            "path": "chapters/ears/topic-gmail-gateway/Dockerfile",
+            "operation": "create",
+            "context": "Container Img.",
+            "purpose": "Run gateway.",
+            "build_prompt": "Multi-stage build. Root context.",
+            "json_spec_path": "chapters/foundation/ump/UMP-0033/spec.docker.json"
+        },
+        {
+            "path": "docker-compose.yml",
+            "operation": "modify",
+            "context": "Orchestration.",
+            "purpose": "Add ears service.",
+            "build_prompt": "Add ears. Port 3002. Env vars for Gmail.",
+            "json_spec_path": "chapters/foundation/ump/UMP-0033/spec.compose.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "integration"
+        ],
+        "commands": [
+            "docker compose up -d ears"
+        ],
+        "acceptance_criteria": [
+            "Ears checks in"
+        ]
+    }
+}

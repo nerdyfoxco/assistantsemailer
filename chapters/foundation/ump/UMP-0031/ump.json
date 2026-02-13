@@ -1,0 +1,52 @@
+{
+    "ump_id": "UMP-0031",
+    "chapter_id": "CH-06",
+    "topic_id": "TP-02",
+    "phase_id": "PH-14",
+    "title": "Gmail Client Logic",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/foundation/ump/UMP-0031/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/ears/topic-gmail-gateway/src/",
+        "allowed_paths": [
+            "chapters/ears/topic-gmail-gateway/src/client.ts",
+            "chapters/ears/topic-gmail-gateway/test/client.test.ts",
+            "chapters/foundation/ump/**"
+        ],
+        "forbidden_paths": [],
+        "allowed_shared_paths": []
+    },
+    "files": [
+        {
+            "path": "chapters/ears/topic-gmail-gateway/src/client.ts",
+            "operation": "create",
+            "context": "API Client.",
+            "purpose": "Fetch emails from Gmail.",
+            "build_prompt": "Class GmailPoller. Method checkInbox().",
+            "json_spec_path": "chapters/foundation/ump/UMP-0031/spec.client.json"
+        },
+        {
+            "path": "chapters/ears/topic-gmail-gateway/test/client.test.ts",
+            "operation": "create",
+            "context": "Unit Test.",
+            "purpose": "Verify client logic.",
+            "build_prompt": "Mock googleapis. Verify calls.",
+            "json_spec_path": "chapters/foundation/ump/UMP-0031/spec.client.test.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm test"
+        ],
+        "acceptance_criteria": [
+            "Poller fetches emails"
+        ]
+    }
+}

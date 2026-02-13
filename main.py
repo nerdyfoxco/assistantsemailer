@@ -14,9 +14,18 @@ app.add_middleware(
 )
 
 from spine.chapters.public.auth import router as auth_router
+from spine.chapters.developer.api import router as developer_router
+from spine.db.database import engine
+from sqlmodel import SQLModel
 
 app.include_router(api_router)
 app.include_router(auth_router)
+app.include_router(developer_router)
+
+@app.on_event("startup")
+async def on_startup():
+    async with engine.begin() as conn:
+        await conn.run_sync(SQLModel.metadata.create_all)
 
 @app.get("/")
 def health_check():

@@ -1,0 +1,12 @@
+{
+    "ump_id": "UMP-0021",
+    "sealed_at": "2026-02-12T17:55:00Z",
+    "files": {
+        "Dockerfile": "SHA256:PENDING",
+        ".dockerignore": "SHA256:PENDING"
+    },
+    "tests": {
+        "docker_build": "PASSED"
+    },
+    "agent_id": "canonical-ump-execution"
+}

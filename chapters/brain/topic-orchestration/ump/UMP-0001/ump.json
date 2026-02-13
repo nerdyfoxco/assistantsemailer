@@ -1,0 +1,111 @@
+{
+    "ump_id": "UMP-0001",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-01",
+    "title": "Create topic skeleton (Service + smoke test)",
+    "status": "executed",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0001/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "chapters/brain/topic-orchestration/**"
+        ],
+        "forbidden_paths": [
+            "foundation/**",
+            "spine/**",
+            "chapters/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "files": [
+        {
+            "path": "chapters/brain/topic-orchestration/src/server.ts",
+            "operation": "create",
+            "context": "HTTP server entry for topic module.",
+            "purpose": "provide /healthz",
+            "connectivity": {
+                "imports": [
+                    "http"
+                ],
+                "exports": [
+                    "startServer"
+                ]
+            },
+            "build_prompt": "Implement minimal Node HTTP server. Expose startServer({ port }). Handle GET /healthz -> 200 {status:ok}.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0001/spec.server.ts.json"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/src/index.ts",
+            "operation": "create",
+            "context": "Process entry.",
+            "purpose": "Deterministic startup.",
+            "connectivity": {
+                "imports": [
+                    "./server"
+                ],
+                "exports": []
+            },
+            "build_prompt": "Read PORT (default 3000). Call startServer. Log startup line.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0001/spec.index.ts.json"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/test/smoke.test.ts",
+            "operation": "create",
+            "context": "Verifies skeleton behavior.",
+            "purpose": "Prevent regressions.",
+            "connectivity": {
+                "imports": [
+                    "node:test",
+                    "node:assert",
+                    "../src/server"
+                ],
+                "exports": []
+            },
+            "build_prompt": "Use node:test. Start server 0. Fetch /healthz. Assert 200 OK. Close server.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0001/spec.smoke.test.ts.json"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/package.json",
+            "operation": "create",
+            "context": "Package definition.",
+            "purpose": "Deterministic build/test.",
+            "build_prompt": "Name: @chapters/brain-topic-orchestration. Scripts: build, test. Main: dist/index.js",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0001/spec.package.json.json"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/tsconfig.json",
+            "operation": "create",
+            "context": "Compile boundary.",
+            "purpose": "Enforce isolated compilation.",
+            "build_prompt": "outDir: dist, rootDir: src, module: CommonJS, target: ES2022, strict: true",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0001/spec.tsconfig.json.json"
+        }
+    ],
+    "build": {
+        "commands": [
+            "npm install",
+            "npm run build"
+        ],
+        "expected_artifacts": [
+            "dist/index.js"
+        ]
+    },
+    "tests": {
+        "levels": [
+            "unit",
+            "smoke"
+        ],
+        "commands": [
+            "npm run test"
+        ],
+        "acceptance_criteria": [
+            "/healthz returns 200",
+            "No imports from foundation/spine"
+        ]
+    }
+}

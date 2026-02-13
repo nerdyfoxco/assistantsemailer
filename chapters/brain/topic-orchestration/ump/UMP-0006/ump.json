@@ -1,0 +1,62 @@
+{
+    "ump_id": "UMP-0006",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-02",
+    "title": "Observability & Error Taxonomy",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0006/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "foundation/src/telemetry/**",
+            "foundation/src/errors/**",
+            "chapters/brain/topic-orchestration/src/**",
+            "chapters/brain/topic-orchestration/ump/**"
+        ],
+        "forbidden_paths": [
+            "chapters/hands/**",
+            "chapters/eyes/**"
+        ],
+        "allowed_shared_paths": [
+            "foundation/**"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "foundation/src/errors/taxonomy.ts",
+            "operation": "create",
+            "context": "Global error codes.",
+            "purpose": "Standardize error handling.",
+            "build_prompt": "Enum ErrorCode. Class BaseError. extendable.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0006/spec.taxonomy.ts.json"
+        },
+        {
+            "path": "foundation/src/telemetry/logger.ts",
+            "operation": "create",
+            "context": "Structured logging.",
+            "purpose": "Observability.",
+            "build_prompt": "Interface Logger. Console implementation for now (structured JSON).",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0006/spec.logger.ts.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test (foundation)"
+        ],
+        "acceptance_criteria": [
+            "Errors serializable",
+            "Logger outputs JSON"
+        ]
+    }
+}

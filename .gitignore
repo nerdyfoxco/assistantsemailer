@@ -23,3 +23,10 @@ Thumbs.db
 infrastructure/local/01_os/env_status.json
 infrastructure/local/01_os/env_report.html
 spine.db
+
+# Node
+node_modules/
+dist/
+coverage/
+.npm/
+*.tsbuildinfo

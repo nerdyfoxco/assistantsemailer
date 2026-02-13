@@ -1,0 +1,12 @@
+{
+    "ump_id": "UMP-0016",
+    "sealed_at": "2026-02-12T17:25:00Z",
+    "files": {
+        "src/persistence/repository.ts": "SHA256:PENDING",
+        "test/repository.test.ts": "PASSED"
+    },
+    "tests": {
+        "unit_tests": "PASSED"
+    },
+    "agent_id": "canonical-ump-execution"
+}

@@ -1,0 +1,13 @@
+{
+    "ump_id": "UMP-0015",
+    "sealed_at": "2026-02-12T17:20:00Z",
+    "files": {
+        "tools/verify-http.js": "SHA256:PENDING",
+        "chapters/brain/topic-orchestration/src/routes.ts": "SHA256:PENDING",
+        "chapters/legs/topic-worker-runner/src/routes.ts": "SHA256:PENDING"
+    },
+    "tests": {
+        "http_verification": "PASSED"
+    },
+    "agent_id": "canonical-ump-execution"
+}

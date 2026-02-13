@@ -1,0 +1,44 @@
+{
+    "ump_id": "UMP-0021",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-05",
+    "title": "Dockerize Brain Service",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0021/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "chapters/brain/topic-orchestration/Dockerfile",
+            "chapters/brain/topic-orchestration/.dockerignore",
+            "chapters/brain/topic-orchestration/ump/**"
+        ],
+        "forbidden_paths": [],
+        "allowed_shared_paths": []
+    },
+    "files": [
+        {
+            "path": "chapters/brain/topic-orchestration/Dockerfile",
+            "operation": "create",
+            "context": "Container Definition.",
+            "purpose": "Production-ready image.",
+            "build_prompt": "FROM node:20-alpine AS builder... FROM gcr.io/distroless/nodejs20-debian12...",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0021/spec.dockerfile.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "build"
+        ],
+        "commands": [
+            "docker build -t brain-orchestration ."
+        ],
+        "acceptance_criteria": [
+            "Image builds successfully"
+        ]
+    }
+}

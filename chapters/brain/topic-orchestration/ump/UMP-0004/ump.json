@@ -1,0 +1,68 @@
+{
+    "ump_id": "UMP-0004",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-02",
+    "title": "Implement producer for workflow.started",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0004/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "chapters/brain/topic-orchestration/src/**",
+            "chapters/brain/topic-orchestration/test/**",
+            "chapters/brain/topic-orchestration/ump/**"
+        ],
+        "forbidden_paths": [
+            "foundation/**",
+            "spine/**",
+            "chapters/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "chapters/brain/topic-orchestration/src/events/producer.ts",
+            "operation": "create",
+            "context": "Event emitter for orchestration.",
+            "purpose": "Produce strict contract events.",
+            "connectivity": {
+                "imports": [
+                    "events"
+                ],
+                "pipes_produced": [
+                    "pipe.workflow.started.v1"
+                ]
+            },
+            "build_prompt": "Class WorkflowProducer. Method emitWorkflowStarted(payload). Validate against schema (runtime validation optional but recommended if possible, or trust contract tests).",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0004/spec.producer.ts.json"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/test/producer.test.ts",
+            "operation": "create",
+            "context": "Unit test for producer.",
+            "purpose": "Verify emission logic.",
+            "build_prompt": "Mock event sink. Call emitWorkflowStarted. Verify output matches contract.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0004/spec.producer.test.ts.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ],
+        "acceptance_criteria": [
+            "emitWorkflowStarted returns void/promise",
+            "Event emitted matches schema structure"
+        ]
+    }
+}

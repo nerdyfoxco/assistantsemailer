@@ -1,0 +1,70 @@
+{
+    "ump_id": "UMP-0007",
+    "chapter_id": "CH-04",
+    "topic_id": "TP-01",
+    "phase_id": "PH-01",
+    "title": "Register step.scheduled pipe contract",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/legs/topic-worker-runner/ump/UMP-0007/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/legs/topic-worker-runner/",
+        "allowed_paths": [
+            "foundation/contracts/pipes/**",
+            "chapters/legs/topic-worker-runner/ump/**"
+        ],
+        "forbidden_paths": [
+            "foundation/src/**",
+            "chapters/brain/**"
+        ],
+        "allowed_shared_paths": [
+            "foundation/contracts/pipes/**"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": [
+            {
+                "pipe_id": "pipe.step.scheduled.v1",
+                "direction": "down",
+                "producer": "chapters/brain/topic-orchestration",
+                "consumer": "chapters/legs/topic-worker-runner",
+                "schema_path": "foundation/contracts/pipes/schemas/pipe.step.scheduled.v1.schema.json",
+                "version": "1.0.0",
+                "compatibility": "strict"
+            }
+        ]
+    },
+    "files": [
+        {
+            "path": "foundation/contracts/pipes/schemas/pipe.step.scheduled.v1.schema.json",
+            "operation": "create",
+            "context": "Schema for assigning work to legs.",
+            "purpose": "Contract definition.",
+            "build_prompt": "JSON Schema. meta, data (workflow_id, step_id, step_type, inputs).",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0007/spec.pipe.step.scheduled.v1.json"
+        },
+        {
+            "path": "foundation/contracts/pipes/pipe-registry.json",
+            "operation": "modify",
+            "context": "Registry update.",
+            "purpose": "Register new pipe.",
+            "build_prompt": "Add pipe.step.scheduled.v1 entry.",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0007/spec.pipe-registry.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "contract"
+        ],
+        "commands": [
+            "npx ts-node tools/contract-check.ts"
+        ],
+        "acceptance_criteria": [
+            "Registry has new pipe",
+            "Schema validates"
+        ]
+    }
+}

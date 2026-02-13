@@ -1,0 +1,68 @@
+{
+    "ump_id": "UMP-0005",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-02",
+    "title": "Implement consumer for step.completed",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0005/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "chapters/brain/topic-orchestration/src/**",
+            "chapters/brain/topic-orchestration/test/**",
+            "chapters/brain/topic-orchestration/ump/**"
+        ],
+        "forbidden_paths": [
+            "foundation/**",
+            "chapters/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "chapters/brain/topic-orchestration/src/events/consumer.ts",
+            "operation": "create",
+            "context": "Event consumer logic.",
+            "purpose": "Handle incoming pipe events.",
+            "connectivity": {
+                "imports": [
+                    "events",
+                    "./types"
+                ],
+                "pipes_consumed": [
+                    "pipe.workflow.step.completed.v1"
+                ]
+            },
+            "build_prompt": "Class WorkflowConsumer. Method handleStepCompleted(event). Validate schema. Emit local event for logic layer.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0005/spec.consumer.ts.json"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/test/consumer.test.ts",
+            "operation": "create",
+            "context": "Unit test for consumer.",
+            "purpose": "Verify consumption logic.",
+            "build_prompt": "Mock input event. Verify handling logic triggers.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0005/spec.consumer.test.ts.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ],
+        "acceptance_criteria": [
+            "handleStepCompleted processes valid event",
+            "Invalid event throws/logs"
+        ]
+    }
+}

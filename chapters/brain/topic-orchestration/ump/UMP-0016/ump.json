@@ -1,0 +1,52 @@
+{
+    "ump_id": "UMP-0016",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-04",
+    "title": "Workflow Repository Pattern",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0016/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "chapters/brain/topic-orchestration/src/persistence/**",
+            "chapters/brain/topic-orchestration/test/**",
+            "chapters/brain/topic-orchestration/ump/**"
+        ],
+        "forbidden_paths": [],
+        "allowed_shared_paths": []
+    },
+    "files": [
+        {
+            "path": "chapters/brain/topic-orchestration/src/persistence/repository.ts",
+            "operation": "create",
+            "context": "Repository Interface.",
+            "purpose": "Abstract data access.",
+            "build_prompt": "Interface WorkflowRepository. Class InMemoryWorkflowRepository.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0016/spec.repository.ts.json"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/test/repository.test.ts",
+            "operation": "create",
+            "context": "Unit Test.",
+            "purpose": "Verify simple CR operations.",
+            "build_prompt": "Test save and load.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0016/spec.repository.test.ts.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ],
+        "acceptance_criteria": [
+            "Can save and retrieve workflow state"
+        ]
+    }
+}

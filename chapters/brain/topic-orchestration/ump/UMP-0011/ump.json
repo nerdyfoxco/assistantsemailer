@@ -1,0 +1,75 @@
+{
+    "ump_id": "UMP-0011",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-03",
+    "title": "Implement StepScheduler (Producer for step.scheduled)",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0011/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "chapters/brain/topic-orchestration/src/events/**",
+            "chapters/brain/topic-orchestration/test/**",
+            "chapters/brain/topic-orchestration/ump/**"
+        ],
+        "forbidden_paths": [
+            "chapters/legs/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "contracts": {
+        "pipes_added_or_modified": []
+    },
+    "files": [
+        {
+            "path": "chapters/brain/topic-orchestration/src/events/scheduler.ts",
+            "operation": "create",
+            "context": "Producer for outputting work to Legs.",
+            "purpose": "Orchestration Output.",
+            "connectivity": {
+                "imports": [
+                    "events",
+                    "crypto",
+                    "./types"
+                ],
+                "pipes_produced": [
+                    "pipe.step.scheduled.v1"
+                ]
+            },
+            "build_prompt": "Class StepScheduler. Method scheduleStep(payload). Emit 'pipe.step.scheduled.v1'.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0011/spec.scheduler.ts.json"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/src/events/types.ts",
+            "operation": "modify",
+            "context": "Add StepScheduledEvent type.",
+            "purpose": "Type safety.",
+            "build_prompt": "Export interface StepScheduledEvent (match schema).",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0011/spec.types.ts.json"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/test/scheduler.test.ts",
+            "operation": "create",
+            "context": "Unit Test.",
+            "purpose": "Verify emission.",
+            "build_prompt": "Mock event sink.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0011/spec.scheduler.test.ts.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "unit"
+        ],
+        "commands": [
+            "npm run test"
+        ],
+        "acceptance_criteria": [
+            "scheduleStep emits valid event"
+        ]
+    }
+}

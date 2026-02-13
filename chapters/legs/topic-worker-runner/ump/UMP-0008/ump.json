@@ -1,0 +1,68 @@
+{
+    "ump_id": "UMP-0008",
+    "chapter_id": "CH-04",
+    "topic_id": "TP-01",
+    "phase_id": "PH-01",
+    "title": "Implement Worker Runner Skeleton",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/legs/topic-worker-runner/ump/UMP-0008/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/legs/topic-worker-runner/",
+        "allowed_paths": [
+            "chapters/legs/topic-worker-runner/**"
+        ],
+        "forbidden_paths": [
+            "chapters/brain/**"
+        ],
+        "allowed_shared_paths": []
+    },
+    "files": [
+        {
+            "path": "chapters/legs/topic-worker-runner/src/server.ts",
+            "operation": "create",
+            "context": "Worker HTTP Interface (for health/metrics).",
+            "purpose": "Operational readiness.",
+            "build_prompt": "Minimal HTTP server. /healthz.",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0008/spec.server.ts.json"
+        },
+        {
+            "path": "chapters/legs/topic-worker-runner/src/index.ts",
+            "operation": "create",
+            "context": "Entrypoint.",
+            "purpose": "Startup logic.",
+            "build_prompt": "Start server. Log startup.",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0008/spec.index.ts.json"
+        },
+        {
+            "path": "chapters/legs/topic-worker-runner/package.json",
+            "operation": "create",
+            "context": "Package definition.",
+            "purpose": "Build/Test config.",
+            "build_prompt": "Name: @chapters/legs-topic-worker-runner. deps: foundation (if linked) or just independent for now.",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0008/spec.package.json.json"
+        },
+        {
+            "path": "chapters/legs/topic-worker-runner/tsconfig.json",
+            "operation": "create",
+            "context": "TS Config.",
+            "purpose": "Compilation.",
+            "build_prompt": "Strict. outDir dist.",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0008/spec.tsconfig.json.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "smoke"
+        ],
+        "commands": [
+            "npm run test"
+        ],
+        "acceptance_criteria": [
+            "/healthz returns 200"
+        ]
+    }
+}

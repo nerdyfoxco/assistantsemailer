@@ -1,0 +1,43 @@
+{
+    "ump_id": "UMP-0023",
+    "chapter_id": "CH-03",
+    "topic_id": "TP-01",
+    "phase_id": "PH-05",
+    "title": "Docker Compose Environment",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/foundation/ump/UMP-0023/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/",
+        "allowed_paths": [
+            "docker-compose.yml",
+            "chapters/foundation/ump/**"
+        ],
+        "forbidden_paths": [],
+        "allowed_shared_paths": []
+    },
+    "files": [
+        {
+            "path": "docker-compose.yml",
+            "operation": "create",
+            "context": "Orchestration.",
+            "purpose": "Spin up Brain and Legs.",
+            "build_prompt": "Version 3.8. Services: brain (build context), legs (build context).",
+            "json_spec_path": "chapters/foundation/ump/UMP-0023/spec.compose.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "integration"
+        ],
+        "commands": [
+            "docker compose up -d"
+        ],
+        "acceptance_criteria": [
+            "Services accessible on localhost"
+        ]
+    }
+}

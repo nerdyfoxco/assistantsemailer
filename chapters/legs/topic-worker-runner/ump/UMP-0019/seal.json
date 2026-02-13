@@ -1,0 +1,12 @@
+{
+    "ump_id": "UMP-0019",
+    "sealed_at": "2026-02-12T17:45:00Z",
+    "files": {
+        "src/handlers/math.ts": "SHA256:PENDING",
+        "test/handlers.math.test.ts": "PASSED"
+    },
+    "tests": {
+        "unit_tests": "PASSED"
+    },
+    "agent_id": "canonical-ump-execution"
+}

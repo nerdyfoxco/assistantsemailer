@@ -1,0 +1,12 @@
+{
+    "ump_id": "UMP-0032",
+    "sealed_at": "2026-02-13T09:00:00Z",
+    "files": {
+        "src/ingestion.ts": "SHA256:PENDING",
+        "src/index.ts": "SHA256:PENDING"
+    },
+    "tests": {
+        "integration": "DEFERRED_TO_DOCKER"
+    },
+    "agent_id": "canonical-ump-execution"
+}

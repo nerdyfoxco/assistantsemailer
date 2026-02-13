@@ -1,0 +1,66 @@
+{
+    "ump_id": "UMP-0003",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-01",
+    "title": "Contract tests for orchestration pipes",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0003/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "foundation/src/testing/**",
+            "chapters/brain/topic-orchestration/test/**",
+            "chapters/brain/topic-orchestration/ump/**"
+        ],
+        "forbidden_paths": [
+            "foundation/contracts/**",
+            "chapters/**"
+        ],
+        "allowed_shared_paths": [
+            "foundation/src/testing/**"
+        ]
+    },
+    "files": [
+        {
+            "path": "foundation/src/testing/contract-runner.ts",
+            "operation": "create",
+            "context": "Utility to validate payloads against schemas.",
+            "purpose": "Shared contract testing logic.",
+            "build_prompt": "Load schema from foundation. Validate object. Return boolean or list errors.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0003/spec.contract-runner.ts.json"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/test/contracts.workflow.started.test.ts",
+            "operation": "create",
+            "context": "Contract test for workflow.started.",
+            "purpose": "Verify payload structure.",
+            "build_prompt": "Use contract-runner. Valid case: all fields. Invalid case: missing meta.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0003/spec.contracts.workflow.started.test.ts.json"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/test/contracts.workflow.step.completed.test.ts",
+            "operation": "create",
+            "context": "Contract test for step.completed.",
+            "purpose": "Verify payload structure.",
+            "build_prompt": "Use contract-runner. Valid case: success/failure. Invalid case: bad enum.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0003/spec.contracts.workflow.step.completed.test.ts.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "contract"
+        ],
+        "commands": [
+            "npm run test used with node:test"
+        ],
+        "acceptance_criteria": [
+            "Valid payload validates",
+            "Invalid payload throws"
+        ]
+    }
+}

@@ -1,0 +1,88 @@
+{
+    "ump_id": "UMP-0002",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-01",
+    "title": "Register orchestration pipe schemas",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0002/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "foundation/contracts/pipes/**",
+            "chapters/brain/topic-orchestration/contracts/**",
+            "chapters/brain/topic-orchestration/ump/**"
+        ],
+        "forbidden_paths": [
+            "foundation/src/**",
+            "chapters/**"
+        ],
+        "allowed_shared_paths": [
+            "foundation/contracts/pipes/**"
+        ]
+    },
+    "contracts": {
+        "pipes_added_or_modified": [
+            {
+                "pipe_id": "pipe.workflow.started.v1",
+                "direction": "down",
+                "producer": "chapters/brain/topic-orchestration",
+                "consumer": "chapters/brain/topic-orchestration",
+                "schema_path": "foundation/contracts/pipes/schemas/pipe.workflow.started.v1.schema.json",
+                "version": "1.0.0",
+                "compatibility": "strict"
+            },
+            {
+                "pipe_id": "pipe.workflow.step.completed.v1",
+                "direction": "up",
+                "producer": "chapters/legs/topic-worker-runner",
+                "consumer": "chapters/brain/topic-orchestration",
+                "schema_path": "foundation/contracts/pipes/schemas/pipe.workflow.step.completed.v1.schema.json",
+                "version": "1.0.0",
+                "compatibility": "strict"
+            }
+        ]
+    },
+    "files": [
+        {
+            "path": "foundation/contracts/pipes/schemas/pipe.workflow.started.v1.schema.json",
+            "operation": "create",
+            "context": "Schema for workflow start event.",
+            "purpose": "Contract definition.",
+            "build_prompt": "JSON Schema. meta (event_id, timestamp, producer, version), data (workflow_id, workflow_name, initiator, inputs).",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0002/spec.pipe.workflow.started.v1.json"
+        },
+        {
+            "path": "foundation/contracts/pipes/schemas/pipe.workflow.step.completed.v1.schema.json",
+            "operation": "create",
+            "context": "Schema for step completion.",
+            "purpose": "Contract definition.",
+            "build_prompt": "JSON Schema. meta (...), data (workflow_id, step_id, status, outputs).",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0002/spec.pipe.workflow.step.completed.v1.json"
+        },
+        {
+            "path": "foundation/contracts/pipes/pipe-registry.json",
+            "operation": "modify",
+            "context": "Registry of all pipes.",
+            "purpose": "Central lookup.",
+            "build_prompt": "Add entries for pipe.workflow.started.v1 and pipe.workflow.step.completed.v1.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0002/spec.pipe-registry.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "contract"
+        ],
+        "commands": [
+            "npm run contract-check (placeholder)"
+        ],
+        "acceptance_criteria": [
+            "Valid JSON Schema",
+            "Registry updated"
+        ]
+    }
+}

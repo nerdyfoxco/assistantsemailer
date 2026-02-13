@@ -1,0 +1,12 @@
+{
+    "ump_id": "UMP-0006",
+    "sealed_at": "2026-02-12T16:32:00Z",
+    "files": {
+        "foundation/src/errors/taxonomy.ts": "SHA256:PENDING",
+        "foundation/src/telemetry/logger.ts": "SHA256:PENDING"
+    },
+    "tests": {
+        "build_check": "PASSED"
+    },
+    "agent_id": "canonical-ump-execution"
+}

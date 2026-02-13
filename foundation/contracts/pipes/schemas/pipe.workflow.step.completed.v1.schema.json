@@ -1,0 +1,74 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "meta",
+        "data"
+    ],
+    "properties": {
+        "meta": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "event_id",
+                "timestamp_utc",
+                "correlation_id",
+                "producer",
+                "schema_version"
+            ],
+            "properties": {
+                "event_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "timestamp_utc": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "correlation_id": {
+                    "type": "string"
+                },
+                "producer": {
+                    "type": "string"
+                },
+                "schema_version": {
+                    "type": "string",
+                    "const": "1.0.0"
+                }
+            }
+        },
+        "data": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "workflow_id",
+                "step_id",
+                "step_name",
+                "status"
+            ],
+            "properties": {
+                "workflow_id": {
+                    "type": "string"
+                },
+                "step_id": {
+                    "type": "string"
+                },
+                "step_name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "success",
+                        "failure"
+                    ]
+                },
+                "outputs": {
+                    "type": "object",
+                    "additionalProperties": true
+                }
+            }
+        }
+    }
+}

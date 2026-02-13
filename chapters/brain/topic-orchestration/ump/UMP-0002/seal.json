@@ -1,0 +1,13 @@
+{
+    "ump_id": "UMP-0002",
+    "sealed_at": "2026-02-12T16:21:00Z",
+    "files": {
+        "foundation/contracts/pipes/pipe-registry.json": "VALIDATED",
+        "foundation/contracts/pipes/schemas/pipe.workflow.started.v1.schema.json": "VALIDATED",
+        "foundation/contracts/pipes/schemas/pipe.workflow.step.completed.v1.schema.json": "VALIDATED"
+    },
+    "tests": {
+        "schema_validation": "PASSED"
+    },
+    "agent_id": "canonical-ump-architect"
+}

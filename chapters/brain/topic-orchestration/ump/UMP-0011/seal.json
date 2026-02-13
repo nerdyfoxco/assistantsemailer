@@ -1,0 +1,13 @@
+{
+    "ump_id": "UMP-0011",
+    "sealed_at": "2026-02-12T16:42:00Z",
+    "files": {
+        "src/events/types.ts": "SHA256:PENDING",
+        "src/events/scheduler.ts": "SHA256:PENDING",
+        "test/scheduler.test.ts": "PASSED"
+    },
+    "tests": {
+        "unit_tests": "PASSED"
+    },
+    "agent_id": "canonical-ump-execution"
+}

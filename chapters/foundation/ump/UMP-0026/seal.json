@@ -1,0 +1,11 @@
+{
+    "ump_id": "UMP-0026",
+    "sealed_at": "2026-02-12T18:50:00Z",
+    "files": {
+        "tools/verify-e2e-docker.js": "SHA256:PENDING"
+    },
+    "tests": {
+        "e2e_verification": "PASSED"
+    },
+    "agent_id": "canonical-ump-execution"
+}

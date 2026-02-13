@@ -1,0 +1,44 @@
+{
+    "ump_id": "UMP-0022",
+    "chapter_id": "CH-02",
+    "topic_id": "TP-02",
+    "phase_id": "PH-05",
+    "title": "Dockerize Legs Service",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/legs/topic-worker-runner/ump/UMP-0022/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/legs/topic-worker-runner/",
+        "allowed_paths": [
+            "chapters/legs/topic-worker-runner/Dockerfile",
+            "chapters/legs/topic-worker-runner/.dockerignore",
+            "chapters/legs/topic-worker-runner/ump/**"
+        ],
+        "forbidden_paths": [],
+        "allowed_shared_paths": []
+    },
+    "files": [
+        {
+            "path": "chapters/legs/topic-worker-runner/Dockerfile",
+            "operation": "create",
+            "context": "Container Definition.",
+            "purpose": "Production-ready image.",
+            "build_prompt": "FROM node:20-alpine AS builder... FROM node:20-alpine AS runner...",
+            "json_spec_path": "chapters/legs/topic-worker-runner/ump/UMP-0022/spec.dockerfile.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "build"
+        ],
+        "commands": [
+            "docker build -t legs-worker-runner ."
+        ],
+        "acceptance_criteria": [
+            "Image builds successfully"
+        ]
+    }
+}

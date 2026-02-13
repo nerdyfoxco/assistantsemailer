@@ -1,0 +1,52 @@
+{
+    "ump_id": "UMP-0024",
+    "chapter_id": "CH-01",
+    "topic_id": "TP-01",
+    "phase_id": "PH-06",
+    "title": "Postgres Workflow Repository",
+    "status": "planned",
+    "immutability": {
+        "sealed": false,
+        "seal_path": "chapters/brain/topic-orchestration/ump/UMP-0024/seal.json",
+        "successor_policy": "new_ump_required_for_changes"
+    },
+    "scope": {
+        "module_path": "chapters/brain/topic-orchestration/",
+        "allowed_paths": [
+            "chapters/brain/topic-orchestration/src/persistence/**",
+            "chapters/brain/topic-orchestration/test/**",
+            "chapters/brain/topic-orchestration/ump/**"
+        ],
+        "forbidden_paths": [],
+        "allowed_shared_paths": []
+    },
+    "files": [
+        {
+            "path": "chapters/brain/topic-orchestration/src/persistence/postgres.ts",
+            "operation": "create",
+            "context": "Infrastructure Adapter.",
+            "purpose": "Persist workflows to Postgres.",
+            "build_prompt": "Class PostgresWorkflowRepository implements WorkflowRepository. Uses pg.Pool.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0024/spec.pg_repo.json"
+        },
+        {
+            "path": "chapters/brain/topic-orchestration/test/persistence/postgres.test.ts",
+            "operation": "create",
+            "context": "Integration Test.",
+            "purpose": "Verify DB operations.",
+            "build_prompt": "Test save and load using a mock PG client or real DB if env var present.",
+            "json_spec_path": "chapters/brain/topic-orchestration/ump/UMP-0024/spec.pg_repo.test.json"
+        }
+    ],
+    "tests": {
+        "levels": [
+            "integration"
+        ],
+        "commands": [
+            "npm run test"
+        ],
+        "acceptance_criteria": [
+            "Repo saves and loads from DB"
+        ]
+    }
+}
